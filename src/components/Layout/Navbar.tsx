@@ -137,7 +137,7 @@ const Navbar: React.FC = () => {
   
   // Close mobile menu when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleMouseClickOutside = (event: MouseEvent) => {
       if (
         mobileMenuOpen && 
         mobileMenuRef.current && 
@@ -149,12 +149,24 @@ const Navbar: React.FC = () => {
       }
     };
     
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
+    const handleTouchOutside = (event: TouchEvent) => {
+      if (
+        mobileMenuOpen && 
+        mobileMenuRef.current && 
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        mobileButtonRef.current &&
+        !mobileButtonRef.current.contains(event.target as Node)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleMouseClickOutside);
+    document.addEventListener('touchstart', handleTouchOutside);
     
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('mousedown', handleMouseClickOutside);
+      document.removeEventListener('touchstart', handleTouchOutside);
     };
   }, [mobileMenuOpen]);
   
