@@ -5,6 +5,19 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2023-08-26
+
+### Added
+- Complete set of favicon files for better cross-platform support
+- SVG favicon for modern browsers
+- Apple Touch Icon for iOS devices
+- Web app manifest icons in multiple sizes
+- Proper favicon for different screen resolutions
+
+### Changed
+- Updated theme color in manifest and meta tags to match app's green theme
+- Improved PWA support with proper icons and manifest settings
+
 ## [0.5.2] - 2023-08-25
 
 ### Added
