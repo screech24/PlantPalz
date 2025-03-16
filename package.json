@@ -2,7 +2,7 @@
   "name": "plant-palz",
   "version": "0.3.0",
   "private": true,
-  "homepage": "https://yourusername.github.io/plant-palz",
+  "homepage": "https://screech24.github.io/PlantPalz",
   "dependencies": {
     "@react-three/drei": "^10.0.4",
     "@react-three/fiber": "^9.1.0",
