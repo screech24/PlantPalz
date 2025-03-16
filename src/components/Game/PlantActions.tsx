@@ -81,7 +81,7 @@ export const PlantActions: React.FC<PlantActionsProps> = ({ plant }) => {
     <Container>
       <Card title="Care Actions">
         <ActionGrid>
-          <Button onClick={handleWater} variant="primary">
+          <Button onClick={handleWater} variant="water">
             Water
           </Button>
           <Button onClick={handleFertilize} variant="success">

@@ -20,17 +20,37 @@ const CustomizationGrid = styled.div`
   margin-top: 10px;
 `;
 
-const PotOption = styled.div<{ selected: boolean }>`
+const getPotTypeColor = (potType: PotType) => {
+  switch (potType) {
+    case 'basic': return '#8d6e63';
+    case 'round': return '#5c6bc0';
+    case 'square': return '#26a69a';
+    case 'hexagonal': return '#ec407a';
+    case 'decorative': return '#7e57c2';
+    default: return '#8d6e63';
+  }
+};
+
+const PotOption = styled.div<{ selected: boolean; potType: PotType }>`
   padding: 8px;
   border-radius: 8px;
-  background-color: ${props => props.selected ? props.theme.accentLight : props.theme.cardBackground};
-  border: 2px solid ${props => props.selected ? props.theme.accent : props.theme.border};
+  background-color: ${props => props.selected 
+    ? `${getPotTypeColor(props.potType)}` 
+    : props.theme.colors.surface};
+  border: 2px solid ${props => props.selected 
+    ? props.theme.colors.primary 
+    : props.theme.colors.border};
   cursor: pointer;
   text-align: center;
   transition: all 0.2s ease;
+  color: ${props => props.selected ? '#ffffff' : props.theme.colors.text.primary};
+  font-weight: ${props => props.selected ? 'bold' : 'normal'};
   
   &:hover {
-    background-color: ${props => props.theme.accentLight};
+    background-color: ${props => props.selected 
+      ? getPotTypeColor(props.potType) 
+      : `${getPotTypeColor(props.potType)}40`};
+    transform: translateY(-2px);
   }
 `;
 
@@ -39,14 +59,21 @@ const ColorOption = styled.div<{ color: string; selected: boolean }>`
   height: 30px;
   border-radius: 50%;
   background-color: ${props => props.color};
-  border: 2px solid ${props => props.selected ? props.theme.accent : props.theme.border};
+  border: 3px solid ${props => props.selected ? props.theme.colors.primary : props.theme.colors.border};
   cursor: pointer;
   margin: 0 auto;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+  }
 `;
 
 const SectionTitle = styled.h4`
   margin: 15px 0 5px;
   font-size: 1rem;
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const PlantCustomization: React.FC<PlantCustomizationProps> = ({ plant }) => {
@@ -89,6 +116,7 @@ export const PlantCustomization: React.FC<PlantCustomizationProps> = ({ plant })
           {potTypes.map((potType) => (
             <PotOption
               key={potType}
+              potType={potType}
               selected={plant.potType === potType}
               onClick={() => handlePotTypeChange(potType)}
             >

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'success';
+  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'water';
   size?: 'small' | 'medium' | 'large';
   fullWidth?: boolean;
   children: React.ReactNode;
@@ -39,6 +39,7 @@ const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
     variant === 'secondary' ? theme.colors.secondary : 
     variant === 'danger' ? theme.colors.error : 
     variant === 'success' ? theme.colors.primary : 
+    variant === 'water' ? '#2196f3' : 
     theme.colors.primary};
   
   color: ${({ variant, theme }) => 
@@ -56,6 +57,7 @@ const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
       variant === 'secondary' ? theme.colors.secondaryDark : 
       variant === 'danger' ? theme.colors.error : 
       variant === 'success' ? theme.colors.primaryDark : 
+      variant === 'water' ? '#1976d2' : 
       theme.colors.primaryDark};
   }
   

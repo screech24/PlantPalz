@@ -5,6 +5,19 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2] - 2023-08-25
+
+### Added
+- New 'water' button variant with blue color for better visual distinction
+- Colorful pot style buttons with unique colors for each pot type
+- Improved hover effects for pot customization options
+
+### Changed
+- Reorganized game page layout for better responsiveness on both mobile and desktop
+- Enhanced grid layout to better utilize screen space
+- Improved button group responsiveness on small screens
+- Separated plant customization into its own grid area for better organization
+
 ## [0.5.1] - 2023-08-22
 
 ### Fixed

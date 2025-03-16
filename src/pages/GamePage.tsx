@@ -13,7 +13,11 @@ import Button from '../components/UI/Button';
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 16px;
+  
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 24px;
+  }
 `;
 
 const Header = styled.div`
@@ -21,6 +25,13 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const Title = styled.h1`
@@ -31,14 +42,14 @@ const Title = styled.h1`
 const GameGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: 16px;
   
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 3fr 2fr;
+    grid-template-areas: 
+      "view stats"
+      "view actions"
+      "view customize";
   }
 `;
 
@@ -47,38 +58,47 @@ const PlantViewContainer = styled.div`
   border-radius: 12px;
   overflow: hidden;
   box-shadow: ${({ theme }) => theme.shadows.md};
-  grid-column: 1 / -1;
   
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
-    grid-column: 1 / 3;
-    grid-row: 1 / 3;
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-area: view;
+    height: 100%;
+    min-height: 500px;
   }
 `;
 
 const StatsContainer = styled.div`
-  grid-column: 1 / -1;
-  
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-column: auto;
+    grid-area: stats;
   }
 `;
 
 const ActionsContainer = styled.div`
-  grid-column: 1 / -1;
-  
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-column: auto;
+    grid-area: actions;
+  }
+`;
+
+const CustomizationContainer = styled.div`
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-area: customize;
   }
 `;
 
 const ListContainer = styled.div`
-  grid-column: 1 / -1;
   margin-top: 24px;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   gap: 12px;
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 100%;
+    
+    > button {
+      flex: 1;
+    }
+  }
 `;
 
 export const GamePage: React.FC = () => {
@@ -133,8 +153,11 @@ export const GamePage: React.FC = () => {
         
         <ActionsContainer>
           <PlantActions plant={activePlant} />
-          {activePlant && <PlantCustomization plant={activePlant} />}
         </ActionsContainer>
+        
+        <CustomizationContainer>
+          {activePlant && <PlantCustomization plant={activePlant} />}
+        </CustomizationContainer>
       </GameGrid>
       
       <ListContainer>
