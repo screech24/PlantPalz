@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useGameStore } from '../store/gameStore';
+import { useThemeStore } from '../store/themeStore';
 import Button from '../components/UI/Button';
 import Card from '../components/UI/Card';
 
@@ -93,6 +94,61 @@ const SliderValue = styled.span`
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
 `;
 
+const ToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const ToggleSwitch = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+`;
+
+const ToggleInput = styled.input`
+  opacity: 0;
+  width: 0;
+  height: 0;
+  
+  &:checked + span {
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
+  
+  &:checked + span:before {
+    transform: translateX(26px);
+  }
+`;
+
+const ToggleSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${({ theme }) => theme.colors.border};
+  transition: ${({ theme }) => theme.transitions.short};
+  border-radius: 34px;
+  
+  &:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: ${({ theme }) => theme.transitions.short};
+    border-radius: 50%;
+  }
+`;
+
+const ToggleLabel = styled.span`
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+`;
+
 const ConfirmationModal = styled.div<{ isVisible: boolean }>`
   position: fixed;
   top: 0;
@@ -127,6 +183,7 @@ const ModalButtons = styled.div`
 
 const SettingsPage: React.FC = () => {
   const { timeScale, setTimeScale, resetGame } = useGameStore();
+  const { isDarkMode, toggleTheme } = useThemeStore();
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
   
   const handleTimeScaleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,6 +230,29 @@ const SettingsPage: React.FC = () => {
             />
             <SliderValue>{timeScale}x</SliderValue>
           </SliderContainer>
+        </SettingItem>
+      </SettingsSection>
+      
+      <SettingsSection>
+        <SectionTitle>Appearance</SectionTitle>
+        
+        <SettingItem>
+          <SettingLabel htmlFor="darkMode">Dark Mode</SettingLabel>
+          <SettingDescription>
+            Switch between light and dark theme for your Plant Palz experience.
+          </SettingDescription>
+          <ToggleContainer>
+            <ToggleSwitch>
+              <ToggleInput 
+                id="darkMode"
+                type="checkbox" 
+                checked={isDarkMode}
+                onChange={toggleTheme}
+              />
+              <ToggleSlider />
+            </ToggleSwitch>
+            <ToggleLabel>{isDarkMode ? 'On' : 'Off'}</ToggleLabel>
+          </ToggleContainer>
         </SettingItem>
       </SettingsSection>
       

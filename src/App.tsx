@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import { useGameStore } from './store/gameStore';
+import { useThemeStore } from './store/themeStore';
 import GamePage from './pages/GamePage';
 import HomePage from './pages/HomePage';
 import SharePage from './pages/SharePage';
@@ -9,7 +10,7 @@ import SettingsPage from './pages/SettingsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
-import { theme } from './styles/theme';
+import { lightTheme, darkTheme } from './styles/theme';
 import GlobalStyle from './styles/GlobalStyle';
 
 const AppContainer = styled.div`
@@ -25,6 +26,7 @@ const MainContent = styled.main`
 
 function App() {
   const { updateGameState } = useGameStore();
+  const { isDarkMode } = useThemeStore();
   
   // Update game state periodically
   useEffect(() => {
@@ -35,8 +37,11 @@ function App() {
     return () => clearInterval(interval);
   }, [updateGameState]);
   
+  // Select theme based on isDarkMode
+  const currentTheme = isDarkMode ? darkTheme : lightTheme;
+  
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={currentTheme}>
       <GlobalStyle />
       <Router>
         <AppContainer>
