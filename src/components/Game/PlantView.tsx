@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useThreeScene } from '../../hooks/useThreeScene';
-import { Plant } from '../../types';
 import { useGameStore } from '../../store/gameStore';
 import { getMoodResponse } from '../../utils/plantResponses';
 
@@ -85,8 +84,8 @@ export const PlantView: React.FC<PlantViewProps> = ({ plantId }) => {
   const plants = useGameStore((state) => state.plants);
   const plant = plants.find((p) => p.id === plantId) || null;
   
-  const { isLoading, takeScreenshot } = useThreeScene({
-    containerRef,
+  const { isLoading } = useThreeScene({
+    containerRef: containerRef as React.RefObject<HTMLDivElement>,
     plant,
   });
   

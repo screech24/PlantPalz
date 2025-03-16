@@ -19,31 +19,34 @@ export const useThreeScene = ({ containerRef, plant }: UseThreeSceneProps) => {
   const potModelRef = useRef<ReturnType<typeof createPotModel> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Initialize the scene
+  // Initialize Three.js scene
   useEffect(() => {
     if (!containerRef.current) return;
     
-    // Create scene
+    // Store a reference to the container element
+    const container = containerRef.current;
+    
+    // Initialize scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
     sceneRef.current = scene;
     
-    // Create camera
+    // Initialize camera
     const camera = new THREE.PerspectiveCamera(
-      50, // FOV
-      containerRef.current.clientWidth / containerRef.current.clientHeight, // Aspect ratio
-      0.1, // Near clipping plane
-      1000 // Far clipping plane
+      50,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      1000
     );
-    camera.position.set(0, 1, 3);
+    camera.position.set(0, 5, 10);
     cameraRef.current = camera;
     
-    // Create renderer
+    // Initialize renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
     
     // Add orbit controls
@@ -112,8 +115,8 @@ export const useThreeScene = ({ containerRef, plant }: UseThreeSceneProps) => {
     return () => {
       window.removeEventListener('resize', handleResize);
       
-      if (rendererRef.current && containerRef.current) {
-        containerRef.current.removeChild(rendererRef.current.domElement);
+      if (rendererRef.current && container) {
+        container.removeChild(rendererRef.current.domElement);
       }
       
       if (rendererRef.current) {
@@ -135,13 +138,13 @@ export const useThreeScene = ({ containerRef, plant }: UseThreeSceneProps) => {
         });
       }
     };
-  }, [containerRef]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
   // Update plant model when plant changes
   useEffect(() => {
-    if (!sceneRef.current || !plant) return;
+    if (!plant || !sceneRef.current) return;
     
-    // Remove existing plant and pot models
+    // Remove existing plant and pot models if they exist
     if (plantModelRef.current) {
       sceneRef.current.remove(plantModelRef.current.group);
       plantModelRef.current = null;
@@ -153,7 +156,7 @@ export const useThreeScene = ({ containerRef, plant }: UseThreeSceneProps) => {
     }
     
     // Create new pot model
-    const potModel = createPotModel('basic', 'terracotta');
+    const potModel = createPotModel('basic', plant.potColor as any);
     potModelRef.current = potModel;
     sceneRef.current.add(potModel.group);
     
@@ -163,14 +166,6 @@ export const useThreeScene = ({ containerRef, plant }: UseThreeSceneProps) => {
     sceneRef.current.add(plantModel.group);
     
   }, [plant]);
-  
-  // Update plant growth stage when it changes
-  useEffect(() => {
-    if (!plantModelRef.current || !plant) return;
-    
-    plantModelRef.current.updateGrowth(plant.growthStage);
-    
-  }, [plant?.growthStage]);
   
   return {
     isLoading,

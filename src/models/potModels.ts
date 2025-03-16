@@ -25,8 +25,17 @@ export class PotModel {
     // Clear existing model
     while (this.group.children.length > 0) {
       const object = this.group.children[0];
-      object.geometry?.dispose();
-      (object as THREE.Mesh).material?.dispose();
+      if ((object as THREE.Mesh).geometry) {
+        (object as THREE.Mesh).geometry.dispose();
+      }
+      if ((object as THREE.Mesh).material) {
+        const material = (object as THREE.Mesh).material;
+        if (Array.isArray(material)) {
+          material.forEach(m => m.dispose());
+        } else {
+          material.dispose();
+        }
+      }
       this.group.remove(object);
     }
     
@@ -54,6 +63,11 @@ export class PotModel {
   setColor(color: PotColor) {
     this.color = color;
     this.generate();
+  }
+  
+  // Update color (alias for setColor for consistency with plant models)
+  updateColor(color: PotColor) {
+    this.setColor(color);
   }
   
   // Get color value based on pot color
@@ -286,9 +300,6 @@ export class PotModel {
       0.06, // height (slightly larger to avoid z-fighting)
       topWidth - 0.05 // depth
     );
-    
-    const rimBSP = new THREE.Mesh(rimGeometry);
-    const innerBSP = new THREE.Mesh(innerGeometry);
     
     // Since we can't use CSG directly, we'll fake it with a frame
     const rimMaterial = new THREE.MeshStandardMaterial({

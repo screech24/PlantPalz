@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Plant } from '../../types';
 import { useGameStore } from '../../store/gameStore';
 import Card from '../UI/Card';
 import Button from '../UI/Button';

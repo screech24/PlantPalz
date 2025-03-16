@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'danger' | 'success';
   size?: 'small' | 'medium' | 'large';
   fullWidth?: boolean;
   children: React.ReactNode;
+  as?: React.ElementType | typeof Link;
+  to?: string;
+  href?: string;
 }
 
 const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
@@ -72,11 +76,13 @@ export const Button: React.FC<ButtonProps> = ({
   children, 
   variant = 'primary', 
   size = 'medium', 
-  fullWidth = false, 
+  fullWidth = false,
+  as: Component = 'button',
   ...props 
 }) => {
   return (
     <StyledButton
+      as={Component}
       variant={variant}
       size={size}
       fullWidth={fullWidth}

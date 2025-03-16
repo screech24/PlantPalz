@@ -93,12 +93,6 @@ const SliderValue = styled.span`
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
 `;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 16px;
-  margin-top: 32px;
-`;
-
 const ConfirmationModal = styled.div<{ isVisible: boolean }>`
   position: fixed;
   top: 0;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Plant } from '../types';
 import { handleSharedPlantLink } from '../utils/sharing';
-import { useGameStore } from '../stores/gameStore';
+import { useGameStore } from '../store/gameStore';
 import PlantView from '../components/Game/PlantView';
 import PlantStats from '../components/Game/PlantStats';
 import Button from '../components/UI/Button';
@@ -73,24 +73,24 @@ const ErrorMessage = styled.div`
   color: #d32f2f;
 `;
 
-const SharePage: React.FC = () => {
-  const navigate = useNavigate();
-  const { plants, getPlantById } = useGameStore();
+export const SharePage: React.FC = () => {
   const [sharedPlant, setSharedPlant] = useState<Plant | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const { getPlantById } = useGameStore();
   
   useEffect(() => {
     const loadSharedPlant = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         
         // Get plant ID from URL
         const plantId = handleSharedPlantLink();
         
         if (!plantId) {
           setError('No plant found in the shared link');
-          setLoading(false);
+          setIsLoading(false);
           return;
         }
         
@@ -99,16 +99,16 @@ const SharePage: React.FC = () => {
         
         if (!plant) {
           setError('Plant not found. It may have been deleted or the link is invalid.');
-          setLoading(false);
+          setIsLoading(false);
           return;
         }
         
         setSharedPlant(plant);
-        setLoading(false);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error loading shared plant:', error);
         setError('Failed to load the shared plant');
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     
@@ -127,7 +127,7 @@ const SharePage: React.FC = () => {
     navigate('/game');
   };
   
-  if (loading) {
+  if (isLoading) {
     return (
       <Container>
         <LoadingMessage>Loading shared plant...</LoadingMessage>

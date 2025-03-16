@@ -20,8 +20,17 @@ export class PlantModel {
     // Clear existing model
     while (this.group.children.length > 0) {
       const object = this.group.children[0];
-      object.geometry?.dispose();
-      (object as THREE.Mesh).material?.dispose();
+      if ((object as THREE.Mesh).geometry) {
+        (object as THREE.Mesh).geometry.dispose();
+      }
+      if ((object as THREE.Mesh).material) {
+        const material = (object as THREE.Mesh).material;
+        if (Array.isArray(material)) {
+          material.forEach(m => m.dispose());
+        } else {
+          material.dispose();
+        }
+      }
       this.group.remove(object);
     }
     

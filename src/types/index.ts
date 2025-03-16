@@ -31,6 +31,7 @@ export type Plant = {
   fertilizerLevel: number; // 0-100
   sunExposure: number; // 0-100
   personality: PlantPersonality;
+  potColor: string;
   traits: PlantTrait[];
   careHistory: CareHistory[];
   lastInteraction: number;

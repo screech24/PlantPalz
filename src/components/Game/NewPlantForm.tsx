@@ -40,20 +40,6 @@ const Input = styled.input`
   }
 `;
 
-const Select = styled.select`
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: white;
-  
-  &:focus {
-    outline: none;
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-  }
-`;
-
 const PlantTypeOption = styled.div<{ selected: boolean }>`
   padding: 12px;
   border: 2px solid ${({ selected }) => (selected ? '#4CAF50' : '#ddd')};

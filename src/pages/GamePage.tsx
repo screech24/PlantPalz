@@ -80,10 +80,10 @@ const ButtonGroup = styled.div`
   gap: 12px;
 `;
 
-const GamePage: React.FC = () => {
+export const GamePage: React.FC = () => {
   const [isNewPlantModalOpen, setIsNewPlantModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const { plants, activePlantId, getPlantById } = useGameStore();
+  const { activePlantId, getPlantById } = useGameStore();
   
   const activePlant = activePlantId ? getPlantById(activePlantId) : null;
   

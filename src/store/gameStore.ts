@@ -42,6 +42,7 @@ const createNewPlant = (name: string, type: PlantType): Plant => {
     fertilizerLevel: 50,
     sunExposure: 50,
     personality: getRandomPersonality(),
+    potColor: 'terracotta', // Default pot color
     traits: [],
     careHistory: [],
     lastInteraction: Date.now(),
