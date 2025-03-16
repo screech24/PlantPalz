@@ -1,3 +1,5 @@
+import { PotType } from '../models/potModels';
+
 export type PlantType = 'succulent' | 'cactus' | 'fern' | 'flowering';
 
 export type PlantPersonality = 'sassy' | 'shy' | 'cheerful';
@@ -31,6 +33,7 @@ export type Plant = {
   fertilizerLevel: number; // 0-100
   sunExposure: number; // 0-100
   personality: PlantPersonality;
+  potType: PotType;
   potColor: string;
   traits: PlantTrait[];
   careHistory: CareHistory[];

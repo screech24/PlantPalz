@@ -10,9 +10,17 @@ Plant Palz is a virtual plant simulation game where you can grow, nurture, and s
 - **Interactive Care**: Water, fertilize, prune, and adjust sunlight to keep your plants happy and healthy.
 - **Plant Personalities**: Each plant has a unique personality that affects how it responds to your care.
 - **Share Your Plants**: Share your plants with friends and family via social media or direct links.
-- **Customization**: Choose from different plant types, each with unique care requirements.
+- **Customization**: Choose from different plant types and pot styles, each with unique characteristics.
 - **Time Simulation**: Watch your plants grow over time with adjustable time scales.
 - **Dark Mode**: Toggle between light and dark themes for comfortable viewing day or night.
+
+## Customization Features
+
+The customization features allow you to:
+
+- Select from 5 different pot types (basic, round, square, hexagonal, decorative)
+- Choose from 8 different pot colors to match your style
+- Customize each plant individually with its own unique pot
 
 ## Sharing Feature
 
@@ -113,6 +121,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Version History
 
+- 0.5.0: Added pot customization with different types and colors
+- 0.4.1: Enhanced dark mode implementation across all UI components
 - 0.4.0: Added dark mode theme with toggle in settings
 - 0.3.1: Fixed routing issues for GitHub Pages deployment
 - 0.3.0: Fixed bugs, improved performance, and deployed to GitHub Pages

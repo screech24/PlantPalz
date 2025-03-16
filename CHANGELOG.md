@@ -5,6 +5,41 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2023-08-20
+
+### Added
+- Pot customization feature with different pot types (basic, round, square, hexagonal, decorative)
+- Pot color selection with 8 different colors
+- PlantCustomization component for changing pot type and color
+- Added potType property to Plant type
+
+### Fixed
+- Soil positioning in pot models for better visual appearance
+- Removed unused variables in square pot generation
+- Improved hexagonal pot rim implementation
+- Fixed pot models to properly display in the 3D scene
+
+### Changed
+- Updated useThreeScene hook to use plant's potType property
+- Enhanced GameStore with pot type and color update functions
+- Improved overall visual consistency of pot models
+
+## [0.4.1] - 2023-08-15
+
+### Fixed
+- Comprehensive dark mode implementation across all UI components
+- Fixed white backgrounds in Modal and Card components
+- Updated Button component to use theme colors
+- Enhanced ProgressBar to properly support dark mode
+- Improved toggle slider in settings to use theme colors
+- Added theme-aware scrollbar styling
+- Fixed form elements to properly respond to theme changes
+
+### Changed
+- Enhanced GlobalStyle with better transitions between themes
+- Improved overall UI consistency in both light and dark modes
+- Added color transitions for smoother theme switching
+
 ## [0.4.0] - 2023-08-10
 
 ### Added

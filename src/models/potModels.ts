@@ -129,7 +129,7 @@ export class PotModel {
     });
     
     const soil = new THREE.Mesh(soilGeometry, soilMaterial);
-    soil.position.y = -0.05 / 2;
+    soil.position.y = 0; // Position at the top of the pot
     this.group.add(soil);
     
     // Create pot rim
@@ -205,7 +205,7 @@ export class PotModel {
     });
     
     const soil = new THREE.Mesh(soilGeometry, soilMaterial);
-    soil.position.y = -0.05 / 2;
+    soil.position.y = 0; // Position at the top of the pot
     this.group.add(soil);
     
     // Create pot rim
@@ -284,24 +284,10 @@ export class PotModel {
     });
     
     const soil = new THREE.Mesh(soilGeometry, soilMaterial);
-    soil.position.y = -0.05 / 2;
+    soil.position.y = 0; // Position at the top of the pot
     this.group.add(soil);
     
-    // Create pot rim
-    const rimGeometry = new THREE.BoxGeometry(
-      topWidth + 0.05, // width
-      0.05, // height
-      topWidth + 0.05 // depth
-    );
-    
-    // Remove center of rim to create frame
-    const innerGeometry = new THREE.BoxGeometry(
-      topWidth - 0.05, // width
-      0.06, // height (slightly larger to avoid z-fighting)
-      topWidth - 0.05 // depth
-    );
-    
-    // Since we can't use CSG directly, we'll fake it with a frame
+    // Create pot rim using edges instead of the unused geometries
     const rimMaterial = new THREE.MeshStandardMaterial({
       color: this.getColorValue(),
       roughness: 0.7,
@@ -372,7 +358,7 @@ export class PotModel {
     });
     
     const soil = new THREE.Mesh(soilGeometry, soilMaterial);
-    soil.position.y = -0.05 / 2;
+    soil.position.y = 0; // Position at the top of the pot
     this.group.add(soil);
     
     // Create pot rim
@@ -383,39 +369,18 @@ export class PotModel {
       metalness: 0.2
     });
     
-    for (let i = 0; i < 6; i++) {
-      const angle1 = (i / 6) * Math.PI * 2;
-      const angle2 = ((i + 1) / 6) * Math.PI * 2;
-      
-      const x1 = Math.cos(angle1) * topRadius;
-      const z1 = Math.sin(angle1) * topRadius;
-      const x2 = Math.cos(angle2) * topRadius;
-      const z2 = Math.sin(angle2) * topRadius;
-      
-      const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(z2 - z1, 2));
-      
-      const edgeGeometry = new THREE.CylinderGeometry(
-        0.03, // top radius
-        0.03, // bottom radius
-        length, // height
-        8, // radial segments
-        1, // height segments
-        false // open ended
-      );
-      
-      const edge = new THREE.Mesh(edgeGeometry, rimMaterial);
-      
-      // Position and rotate edge
-      edge.position.x = (x1 + x2) / 2;
-      edge.position.z = (z1 + z2) / 2;
-      edge.position.y = 0;
-      
-      // Rotate to align with edge
-      edge.rotation.y = Math.atan2(z2 - z1, x2 - x1);
-      edge.rotation.z = Math.PI / 2;
-      
-      this.group.add(edge);
-    }
+    // Create hexagonal rim
+    const rimGeometry = new THREE.TorusGeometry(
+      topRadius, // radius
+      0.03, // tube radius
+      6, // radial segments (6 for hexagon)
+      32 // tubular segments
+    );
+    
+    const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+    rim.rotation.x = Math.PI / 2;
+    rim.position.y = 0;
+    this.group.add(rim);
   }
   
   // Generate a decorative pot
@@ -484,7 +449,7 @@ export class PotModel {
     });
     
     const soil = new THREE.Mesh(soilGeometry, soilMaterial);
-    soil.position.y = -0.05 / 2;
+    soil.position.y = 0; // Position at the top of the pot
     this.group.add(soil);
     
     // Add decorative patterns

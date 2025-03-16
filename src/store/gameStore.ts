@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
 import { Plant, PlantType, PlantPersonality, CareAction, GameState } from '../types';
+import { PotType, PotColor } from '../models/potModels';
 
 interface GameStore extends GameState {
   // Plant actions
@@ -10,6 +11,8 @@ interface GameStore extends GameState {
   setActivePlant: (id: string | null) => void;
   renamePlant: (id: string, name: string) => void;
   getPlantById: (id: string) => Plant | null;
+  updatePotType: (id: string, potType: PotType) => void;
+  updatePotColor: (id: string, potColor: PotColor) => void;
   
   // Care actions
   waterPlant: (id: string, amount: number) => void;
@@ -42,6 +45,7 @@ const createNewPlant = (name: string, type: PlantType): Plant => {
     fertilizerLevel: 50,
     sunExposure: 50,
     personality: getRandomPersonality(),
+    potType: 'basic', // Default pot type
     potColor: 'terracotta', // Default pot color
     traits: [],
     careHistory: [],
@@ -190,6 +194,22 @@ export const useGameStore = create<GameStore>()(
         set((state) => ({
           plants: state.plants.map((plant) =>
             plant.id === id ? { ...plant, name } : plant
+          ),
+        }));
+      },
+      
+      updatePotType: (id, potType) => {
+        set((state) => ({
+          plants: state.plants.map((plant) =>
+            plant.id === id ? { ...plant, potType } : plant
+          ),
+        }));
+      },
+      
+      updatePotColor: (id, potColor) => {
+        set((state) => ({
+          plants: state.plants.map((plant) =>
+            plant.id === id ? { ...plant, potColor } : plant
           ),
         }));
       },

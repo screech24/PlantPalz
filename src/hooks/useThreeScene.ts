@@ -156,7 +156,7 @@ export const useThreeScene = ({ containerRef, plant }: UseThreeSceneProps) => {
     }
     
     // Create new pot model
-    const potModel = createPotModel('basic', plant.potColor as any);
+    const potModel = createPotModel(plant.potType, plant.potColor as any);
     potModelRef.current = potModel;
     sceneRef.current.add(potModel.group);
     

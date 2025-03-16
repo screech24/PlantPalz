@@ -16,34 +16,34 @@ const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  font-weight: 600;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all ${({ theme }) => theme.transitions.short};
   border: none;
   outline: none;
   
   /* Size variants */
-  padding: ${({ size }) => 
-    size === 'small' ? '8px 16px' : 
-    size === 'large' ? '16px 32px' : 
-    '12px 24px'};
+  padding: ${({ size, theme }) => 
+    size === 'small' ? `${theme.spacing.xs} ${theme.spacing.md}` : 
+    size === 'large' ? `${theme.spacing.md} ${theme.spacing.xl}` : 
+    `${theme.spacing.sm} ${theme.spacing.lg}`};
   
-  font-size: ${({ size }) => 
-    size === 'small' ? '14px' : 
-    size === 'large' ? '18px' : 
-    '16px'};
+  font-size: ${({ size, theme }) => 
+    size === 'small' ? theme.typography.fontSize.sm : 
+    size === 'large' ? theme.typography.fontSize.lg : 
+    theme.typography.fontSize.md};
   
   /* Color variants */
-  background-color: ${({ variant }) => 
-    variant === 'secondary' ? '#f5f5f5' : 
-    variant === 'danger' ? '#f44336' : 
-    variant === 'success' ? '#4caf50' : 
-    '#4CAF50'};
+  background-color: ${({ variant, theme }) => 
+    variant === 'secondary' ? theme.colors.surface : 
+    variant === 'danger' ? theme.colors.error : 
+    variant === 'success' ? theme.colors.primary : 
+    theme.colors.primary};
   
-  color: ${({ variant }) => 
-    variant === 'secondary' ? '#333333' : 
-    '#ffffff'};
+  color: ${({ variant, theme }) => 
+    variant === 'secondary' ? theme.colors.text.primary : 
+    theme.colors.text.primary};
   
   /* Width */
   width: ${({ fullWidth }) => fullWidth ? '100%' : 'auto'};
@@ -51,17 +51,17 @@ const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
   /* Hover and active states */
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: ${({ variant }) => 
-      variant === 'secondary' ? '#e0e0e0' : 
+    box-shadow: ${({ theme }) => theme.shadows.md};
+    background-color: ${({ variant, theme }) => 
+      variant === 'secondary' ? theme.colors.border : 
       variant === 'danger' ? '#d32f2f' : 
-      variant === 'success' ? '#388e3c' : 
-      '#388e3c'};
+      variant === 'success' ? theme.colors.primaryDark : 
+      theme.colors.primaryDark};
   }
   
   &:active {
     transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: ${({ theme }) => theme.shadows.sm};
   }
   
   &:disabled {

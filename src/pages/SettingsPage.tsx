@@ -139,7 +139,7 @@ const ToggleSlider = styled.span`
     width: 26px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
+    background-color: ${({ theme }) => theme.colors.text.primary};
     transition: ${({ theme }) => theme.transitions.short};
     border-radius: 50%;
   }

@@ -16,46 +16,47 @@ const Container = styled.div<{
   fullWidth: boolean;
   clickable: boolean;
 }>`
-  background-color: #ffffff;
-  border-radius: 12px;
+  background-color: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
   padding: ${({ padding }) => padding};
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
   
   /* Elevation variants */
-  box-shadow: ${({ elevation }) =>
+  box-shadow: ${({ elevation, theme }) =>
     elevation === 'low'
-      ? '0 2px 4px rgba(0, 0, 0, 0.05)'
+      ? theme.shadows.sm
       : elevation === 'high'
-      ? '0 8px 16px rgba(0, 0, 0, 0.1)'
-      : '0 4px 8px rgba(0, 0, 0, 0.05)'};
+      ? theme.shadows.lg
+      : theme.shadows.md};
   
   /* Clickable styles */
   cursor: ${({ clickable }) => (clickable ? 'pointer' : 'default')};
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: transform ${({ theme }) => theme.transitions.short}, 
+              box-shadow ${({ theme }) => theme.transitions.short};
   
   &:hover {
     transform: ${({ clickable }) => (clickable ? 'translateY(-2px)' : 'none')};
-    box-shadow: ${({ clickable, elevation }) =>
+    box-shadow: ${({ clickable, elevation, theme }) =>
       clickable
         ? elevation === 'low'
-          ? '0 4px 8px rgba(0, 0, 0, 0.1)'
+          ? theme.shadows.md
           : elevation === 'high'
-          ? '0 12px 24px rgba(0, 0, 0, 0.15)'
-          : '0 8px 16px rgba(0, 0, 0, 0.1)'
+          ? theme.shadows.xl
+          : theme.shadows.lg
         : elevation === 'low'
-        ? '0 2px 4px rgba(0, 0, 0, 0.05)'
+        ? theme.shadows.sm
         : elevation === 'high'
-        ? '0 8px 16px rgba(0, 0, 0, 0.1)'
-        : '0 4px 8px rgba(0, 0, 0, 0.05)'};
+        ? theme.shadows.lg
+        : theme.shadows.md};
   }
 `;
 
 const Title = styled.h3`
   margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333333;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.typography.fontSize.lg};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const Card: React.FC<CardProps> = ({

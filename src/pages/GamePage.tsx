@@ -7,6 +7,7 @@ import PlantActions from '../components/Game/PlantActions';
 import PlantList from '../components/Game/PlantList';
 import NewPlantForm from '../components/Game/NewPlantForm';
 import ShareModal from '../components/Shared/ShareModal';
+import PlantCustomization from '../components/Game/PlantCustomization';
 import Button from '../components/UI/Button';
 
 const Container = styled.div`
@@ -132,6 +133,7 @@ export const GamePage: React.FC = () => {
         
         <ActionsContainer>
           <PlantActions plant={activePlant} />
+          {activePlant && <PlantCustomization plant={activePlant} />}
         </ActionsContainer>
       </GameGrid>
       

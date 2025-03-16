@@ -7,6 +7,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    transition: background-color ${({ theme }) => theme.transitions.medium}, 
+                color ${({ theme }) => theme.transitions.medium},
+                border-color ${({ theme }) => theme.transitions.medium},
+                box-shadow ${({ theme }) => theme.transitions.medium};
   }
   
   html, body {
@@ -19,7 +23,6 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color ${({ theme }) => theme.transitions.medium}, color ${({ theme }) => theme.transitions.medium};
   }
   
   #root {
@@ -30,6 +33,7 @@ const GlobalStyle = createGlobalStyle`
     margin-bottom: ${({ theme }) => theme.spacing.md};
     font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
     line-height: 1.2;
+    color: ${({ theme }) => theme.colors.text.primary};
   }
   
   h1 {
@@ -58,6 +62,7 @@ const GlobalStyle = createGlobalStyle`
   
   p {
     margin-bottom: ${({ theme }) => theme.spacing.md};
+    color: ${({ theme }) => theme.colors.text.primary};
   }
   
   a {
@@ -73,11 +78,15 @@ const GlobalStyle = createGlobalStyle`
   button {
     cursor: pointer;
     font-family: ${({ theme }) => theme.typography.fontFamily};
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.text.primary};
+    border: none;
   }
   
   ul, ol {
     margin-bottom: ${({ theme }) => theme.spacing.md};
     padding-left: ${({ theme }) => theme.spacing.xl};
+    color: ${({ theme }) => theme.colors.text.primary};
   }
   
   img {
@@ -88,11 +97,41 @@ const GlobalStyle = createGlobalStyle`
   input, textarea, select {
     font-family: ${({ theme }) => theme.typography.fontFamily};
     font-size: ${({ theme }) => theme.typography.fontSize.md};
+    background-color: ${({ theme }) => theme.colors.surface};
+    color: ${({ theme }) => theme.colors.text.primary};
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.borderRadius.sm};
+    padding: ${({ theme }) => theme.spacing.sm};
+    
+    &:focus {
+      outline: none;
+      border-color: ${({ theme }) => theme.colors.primary};
+      box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primaryLight}40;
+    }
   }
   
   ::selection {
     background-color: ${({ theme }) => theme.colors.primaryLight};
     color: ${({ theme }) => theme.colors.text.primary};
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.colors.background};
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.border};
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.colors.text.secondary};
   }
 `;
 

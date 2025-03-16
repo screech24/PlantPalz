@@ -28,14 +28,14 @@ const Overlay = styled.div<{ isOpen: boolean }>`
 `;
 
 const ModalContainer = styled.div<{ maxWidth: string; isOpen: boolean }>`
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 24px;
+  background-color: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  padding: ${({ theme }) => theme.spacing.xl};
   max-width: ${({ maxWidth }) => maxWidth};
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: ${({ theme }) => theme.shadows.lg};
   transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(-20px)')};
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -45,14 +45,14 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 const Title = styled.h2`
   margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: #333333;
+  font-size: ${({ theme }) => theme.typography.fontSize.xl};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 const CloseButton = styled.button`
@@ -60,28 +60,29 @@ const CloseButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 24px;
-  color: #666666;
+  color: ${({ theme }) => theme.colors.text.secondary};
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  transition: background-color 0.2s ease;
+  transition: background-color ${({ theme }) => theme.transitions.short};
   
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors.primaryLight}20;
   }
 `;
 
 const Content = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const Modal: React.FC<ModalProps> = ({
