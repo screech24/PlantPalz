@@ -5,6 +5,16 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2023-08-22
+
+### Fixed
+- Improved button styling consistency across the game interface
+- Enhanced secondary button visibility with proper background colors
+- Fixed dark mode compatibility in home page feature cards
+- Updated speech bubbles and response containers to use theme colors
+- Fixed loading overlay and empty states to support dark mode properly
+- Removed all hardcoded color values for better theme consistency
+
 ## [0.5.0] - 2023-08-20
 
 ### Added

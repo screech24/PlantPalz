@@ -56,7 +56,7 @@ const FeaturesSection = styled.section`
 `;
 
 const FeatureCard = styled.div`
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.surface};
   border-radius: 12px;
   padding: 24px;
   box-shadow: ${({ theme }) => theme.shadows.sm};

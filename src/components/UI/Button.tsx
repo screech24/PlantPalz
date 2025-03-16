@@ -36,7 +36,7 @@ const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
   
   /* Color variants */
   background-color: ${({ variant, theme }) => 
-    variant === 'secondary' ? theme.colors.surface : 
+    variant === 'secondary' ? theme.colors.secondary : 
     variant === 'danger' ? theme.colors.error : 
     variant === 'success' ? theme.colors.primary : 
     theme.colors.primary};
@@ -53,8 +53,8 @@ const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
     transform: translateY(-2px);
     box-shadow: ${({ theme }) => theme.shadows.md};
     background-color: ${({ variant, theme }) => 
-      variant === 'secondary' ? theme.colors.border : 
-      variant === 'danger' ? '#d32f2f' : 
+      variant === 'secondary' ? theme.colors.secondaryDark : 
+      variant === 'danger' ? theme.colors.error : 
       variant === 'success' ? theme.colors.primaryDark : 
       theme.colors.primaryDark};
   }

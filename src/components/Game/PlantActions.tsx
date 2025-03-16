@@ -27,12 +27,12 @@ const ActionGrid = styled.div`
 `;
 
 const ResponseContainer = styled.div`
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.colors.surface};
   border-radius: 8px;
   padding: 16px;
   margin-top: 16px;
   font-style: italic;
-  color: #555;
+  color: ${({ theme }) => theme.colors.text.secondary};
 `;
 
 export const PlantActions: React.FC<PlantActionsProps> = ({ plant }) => {

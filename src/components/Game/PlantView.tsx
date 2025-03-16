@@ -29,7 +29,7 @@ const LoadingOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: ${({ theme }) => `rgba(${theme.isDark ? '0, 0, 0' : '255, 255, 255'}, 0.8)`};
   z-index: 10;
 `;
 
@@ -38,7 +38,7 @@ const SpeechBubble = styled.div`
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.surface};
   border-radius: 20px;
   padding: 12px 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -53,7 +53,7 @@ const SpeechBubble = styled.div`
     transform: translateX(-50%);
     border-width: 10px 10px 0;
     border-style: solid;
-    border-color: white transparent transparent;
+    border-color: ${({ theme }) => theme.colors.surface} transparent transparent;
   }
 `;
 
@@ -64,16 +64,16 @@ const EmptyState = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.colors.surface};
   border-radius: 12px;
   
   h3 {
     margin-bottom: 8px;
-    color: #666;
+    color: ${({ theme }) => theme.colors.text.secondary};
   }
   
   p {
-    color: #888;
+    color: ${({ theme }) => theme.colors.text.secondary};
     text-align: center;
     max-width: 80%;
   }
