@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useGameStore } from '../../store/gameStore';
@@ -127,6 +127,36 @@ const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { plants } = useGameStore();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileButtonRef = useRef<HTMLButtonElement>(null);
+  
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+  
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileMenuOpen && 
+        mobileMenuRef.current && 
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        mobileButtonRef.current &&
+        !mobileButtonRef.current.contains(event.target as Node)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
   
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -160,11 +190,11 @@ const Navbar: React.FC = () => {
         </NavLink>
       </NavLinks>
       
-      <MobileMenuButton onClick={toggleMobileMenu}>
+      <MobileMenuButton ref={mobileButtonRef} onClick={toggleMobileMenu}>
         {mobileMenuOpen ? '✕' : '☰'}
       </MobileMenuButton>
       
-      <MobileMenu $isOpen={mobileMenuOpen}>
+      <MobileMenu ref={mobileMenuRef} $isOpen={mobileMenuOpen}>
         <MobileNavLink to="/" $active={isActive('/')} onClick={closeMobileMenu}>
           Home
         </MobileNavLink>

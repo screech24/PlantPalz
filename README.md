@@ -4,7 +4,7 @@ Plant Palz is a virtual plant simulation game where you can grow, nurture, and s
 
 ![Plant Palz Screenshot](public/screenshot.png)
 
-**Current Version: 0.6.0**
+**Current Version: 0.6.1**
 
 ## Features
 
@@ -123,6 +123,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Version History
 
+- 0.6.1: Fixed mobile menu navigation issues and improved mobile UX
+- 0.6.0: Added complete set of favicons for better cross-platform support
+- 0.5.2: Improved button styling and game page layout
 - 0.5.0: Added pot customization with different types and colors
 - 0.4.1: Enhanced dark mode implementation across all UI components
 - 0.4.0: Added dark mode theme with toggle in settings
