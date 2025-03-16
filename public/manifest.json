@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Plant Palz",
+  "name": "Plant Palz - Virtual Plant Simulation Game",
   "icons": [
     {
       "src": "favicon.ico",
@@ -16,10 +16,19 @@
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "maskable_icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#4CAF50",
+  "background_color": "#F5F5F5",
+  "orientation": "portrait",
+  "scope": "/",
+  "description": "Grow and care for virtual plants with unique personalities"
 }

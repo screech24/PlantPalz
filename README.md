@@ -1,6 +1,53 @@
-# Getting Started with Create React App
+# Plant Palz
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Plant Palz is a virtual plant simulation game where you can grow, nurture, and share plants with unique personalities. Experience the joy of gardening in a fun, interactive way!
+
+![Plant Palz Screenshot](public/screenshot.png)
+
+## Features
+
+- **Grow Your Garden**: Start with a seedling and watch it grow through different stages as you care for it.
+- **Interactive Care**: Water, fertilize, prune, and adjust sunlight to keep your plants happy and healthy.
+- **Plant Personalities**: Each plant has a unique personality that affects how it responds to your care.
+- **Share Your Plants**: Share your plants with friends and family via social media or direct links.
+- **Customization**: Choose from different plant types, each with unique care requirements.
+- **Time Simulation**: Watch your plants grow over time with adjustable time scales.
+
+## Sharing Feature
+
+The sharing feature allows you to:
+
+- Generate a unique URL for any plant in your garden
+- Share your plants directly to social media platforms
+- Capture screenshots of your plants to save or share
+- View plants shared by others and add them to your garden
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/plant-palz.git
+   cd plant-palz
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Start the development server:
+   ```
+   npm start
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Available Scripts
 
@@ -31,16 +78,39 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Technologies Used
+
+- React
+- TypeScript
+- Three.js for 3D rendering
+- Styled Components for styling
+- Zustand for state management
+- React Router for navigation
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Plant icons created by [Freepik](https://www.freepik.com)
+- Inspiration from real-world plant care
+
+## Version History
+
+- 0.2.0: Added sharing feature
+- 0.1.0: Initial release with basic plant care functionality
