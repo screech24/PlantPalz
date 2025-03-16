@@ -112,6 +112,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Version History
 
+- 0.3.1: Fixed routing issues for GitHub Pages deployment
 - 0.3.0: Fixed bugs, improved performance, and deployed to GitHub Pages
 - 0.2.0: Added sharing feature
 - 0.1.0: Initial release with basic plant care functionality
