@@ -6,7 +6,7 @@ import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 
 interface NewPlantFormProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
 }
 
@@ -70,7 +70,7 @@ const Footer = styled.div`
   gap: 12px;
 `;
 
-export const NewPlantForm: React.FC<NewPlantFormProps> = ({ isOpen, onClose }) => {
+export const NewPlantForm: React.FC<NewPlantFormProps> = ({ isOpen = true, onClose }) => {
   const [name, setName] = useState('');
   const [type, setType] = useState<PlantType>('succulent');
   const addPlant = useGameStore((state) => state.addPlant);

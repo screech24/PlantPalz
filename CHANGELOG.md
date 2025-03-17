@@ -5,6 +5,12 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2024-05-20
+
+### Fixed
+- Made the `isOpen` prop optional in the NewPlantForm component to fix compatibility issues when used within Modal components
+- Added default value of `true` for the `isOpen` prop to maintain backward compatibility
+
 ## [0.8.0] - 2024-05-17
 
 ### Added
