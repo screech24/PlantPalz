@@ -2,7 +2,7 @@
 
 ![Plant Palz Logo](public/logo192.png)
 
-## Version 1.3.0
+## Version 1.4.0
 
 A virtual plant care simulator where you can grow and nurture your own collection of digital plants. Take care of your plants, watch them grow, and enjoy their unique personalities!
 
@@ -18,13 +18,13 @@ A virtual plant care simulator where you can grow and nurture your own collectio
 - 🗣️ Interact with plants and see their mood responses
 - 🏡 View all your plants together in a 3D garden scene
 
-## New in Version 1.3.0
+## New in Version 1.4.0
 
-- Enhanced 3D garden view with living room scene
-- Improved plant visibility and positioning
-- Added speech bubbles to show plant emotions
-- Repositioned plant controls for better user experience
-- Fixed layout issues to prevent UI elements from overlapping
+- Procedurally generated 3D plants with different types (succulent, cactus, fern, flower)
+- Simple 3D room environment with shelves and window
+- Improved mobile responsiveness for all components
+- Fixed 3D scene rendering and plant controls visibility
+- Enhanced garden view layout with proper sizing and shadows
 
 ## Getting Started
 

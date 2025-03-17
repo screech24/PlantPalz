@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2024-03-17
+
+### Added
+- Procedurally generated 3D plants with different types (succulent, cactus, fern, flower)
+- Simple 3D room environment with shelves and window
+- Selection message when no plant is selected
+- Improved mobile responsiveness for all components
+
+### Changed
+- Replaced external 3D model dependencies with procedurally generated geometry
+- Enhanced plant controls visibility and positioning
+- Improved garden view layout with proper sizing and shadows
+- Optimized mobile layout for better usability on small screens
+
+### Fixed
+- Fixed missing 3D scene rendering
+- Fixed plant controls not being visible
+- Fixed layout issues on mobile devices
+- Improved error handling for 3D model loading
+
 ## [1.3.0] - 2023-07-10
 
 ### Added

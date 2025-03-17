@@ -9,22 +9,30 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 400px;
   overflow: hidden;
+  border-radius: 12px;
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const CanvasContainer = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 400px;
 `;
 
 const ControlsOverlay = styled.div`
   position: absolute;
   bottom: 0;
-  left: 0;
   right: 0;
-  display: flex;
-  justify-content: center;
   z-index: 5;
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const EmptyState = styled.div`
@@ -71,6 +79,21 @@ const SpeechBubble = styled.div`
   }
 `;
 
+const SelectPlantMessage = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text};
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: ${({ theme }) => `rgba(${theme.isDark ? '30, 30, 30, 0.7' : '255, 255, 255, 0.7'})`};
+  backdrop-filter: blur(3px);
+  z-index: 5;
+  pointer-events: none;
+`;
+
 export const GardenView: React.FC = () => {
   const { plants, activePlantId, setActivePlant } = useGameStore();
   const canvasRef = useGardenScene(plants, activePlantId, setActivePlant);
@@ -100,7 +123,13 @@ export const GardenView: React.FC = () => {
       )}
       
       <ControlsOverlay>
-        {activePlantId && <PlantControls plantId={activePlantId} />}
+        {activePlantId ? (
+          <PlantControls plantId={activePlantId} />
+        ) : plants.length > 0 ? (
+          <SelectPlantMessage>
+            Click on a plant to select it
+          </SelectPlantMessage>
+        ) : null}
       </ControlsOverlay>
       
       {plants.length === 0 && (
