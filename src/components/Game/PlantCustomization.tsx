@@ -19,17 +19,17 @@ const CustomizationGrid = styled.div`
   margin-top: 10px;
 `;
 
-const PotButton = styled.button<{ isActive: boolean; color: string }>`
+const PotButton = styled.button<{ $isActive: boolean; $color: string }>`
   width: 100%;
   padding: 8px;
-  border: 2px solid ${({ isActive, color }) => isActive ? color : 'transparent'};
+  border: 2px solid ${({ $isActive, $color }) => $isActive ? $color : 'transparent'};
   border-radius: 8px;
-  background-color: ${({ theme, color }) => color};
-  color: ${({ color }) => 
-    ['white', 'yellow', 'pink'].includes(color.toLowerCase()) ? '#333' : '#fff'};
+  background-color: ${({ theme, $color }) => $color};
+  color: ${({ $color }) => 
+    ['white', 'yellow', 'pink'].includes($color.toLowerCase()) ? '#333' : '#fff'};
   cursor: pointer;
   transition: all 0.2s ease;
-  font-weight: ${({ isActive }) => isActive ? 'bold' : 'normal'};
+  font-weight: ${({ $isActive }) => $isActive ? 'bold' : 'normal'};
   
   &:hover {
     transform: translateY(-2px);
@@ -37,18 +37,17 @@ const PotButton = styled.button<{ isActive: boolean; color: string }>`
   }
 `;
 
-const ColorButton = styled.button<{ color: string; isActive: boolean }>`
+const ColorButton = styled.button<{ $color: string; $isActive: boolean }>`
   width: 100%;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 2px solid ${({ isActive }) => isActive ? '#333' : 'transparent'};
-  background-color: ${({ color }) => color};
+  border: 2px solid ${({ $isActive }) => $isActive ? '#333' : 'transparent'};
+  background-color: ${({ $color }) => $color};
   cursor: pointer;
   transition: all 0.2s ease;
   
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -139,8 +138,8 @@ export const PlantCustomization: React.FC<PlantCustomizationProps> = ({ plantId 
           {potTypes.map((type) => (
             <PotButton
               key={type}
-              isActive={plant.potType === type}
-              color={getPotTypeColor(type)}
+              $isActive={plant.potType === type}
+              $color={getPotTypeColor(type)}
               onClick={() => handlePotTypeChange(type)}
             >
               {getPotTypeName(type)}
@@ -153,8 +152,8 @@ export const PlantCustomization: React.FC<PlantCustomizationProps> = ({ plantId 
           {potColors.map((color) => (
             <ColorButton
               key={color}
-              color={getColorValue(color)}
-              isActive={plant.potColor === color}
+              $color={getColorValue(color)}
+              $isActive={plant.potColor === color}
               onClick={() => handlePotColorChange(color)}
               title={color.charAt(0).toUpperCase() + color.slice(1)}
             />

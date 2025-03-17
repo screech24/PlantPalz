@@ -4,7 +4,7 @@ Plant Palz is a virtual plant simulation game where you can grow, nurture, and s
 
 ![Plant Palz Screenshot](public/screenshot.png)
 
-**Current Version: 0.8.2**
+**Current Version: 0.8.3**
 
 ## Features
 

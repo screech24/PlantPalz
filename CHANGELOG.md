@@ -5,6 +5,16 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.3] - 2024-05-23
+
+### Fixed
+- Fixed styled-components warnings by using transient props with $ prefix
+- Updated Card component to use $padding, $clickable, $elevation, and $fullWidth props
+- Updated ProgressBar component to use $backgroundColor, $color, and $height props
+- Updated PlantList component to use $isActive prop
+- Updated PlantCustomization component to use $isActive and $color props
+- Resolved React DOM warnings about unknown props being passed to DOM elements
+
 ## [0.8.2] - 2024-05-22
 
 ### Fixed

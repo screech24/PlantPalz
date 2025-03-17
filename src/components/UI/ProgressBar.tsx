@@ -25,18 +25,18 @@ const LabelContainer = styled.div`
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
-const BarContainer = styled.div<{ height: string; backgroundColor: string }>`
+const BarContainer = styled.div<{ $height: string; $backgroundColor: string }>`
   width: 100%;
-  height: ${({ height }) => height};
-  background-color: ${({ backgroundColor, theme }) => backgroundColor || theme.colors.border};
+  height: ${({ $height }) => $height};
+  background-color: ${({ $backgroundColor, theme }) => $backgroundColor || theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   overflow: hidden;
 `;
 
-const Bar = styled.div<{ width: string; color: string }>`
+const Bar = styled.div<{ width: string; $color: string }>`
   height: 100%;
   width: ${({ width }) => width};
-  background-color: ${({ color, theme }) => color || theme.colors.primary};
+  background-color: ${({ $color, theme }) => $color || theme.colors.primary};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   transition: width ${({ theme }) => theme.transitions.medium};
 `;
@@ -62,8 +62,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           {showValue && <span>{Math.round(percentage)}%</span>}
         </LabelContainer>
       )}
-      <BarContainer height={height} backgroundColor={backgroundColor || ''}>
-        <Bar width={`${percentage}%`} color={color || ''} />
+      <BarContainer $height={height} $backgroundColor={backgroundColor || ''}>
+        <Bar width={`${percentage}%`} $color={color || ''} />
       </BarContainer>
     </Container>
   );

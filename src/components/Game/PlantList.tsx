@@ -22,12 +22,12 @@ const PlantGrid = styled.div`
   margin-top: 16px;
 `;
 
-const PlantCard = styled.div<{ isActive: boolean }>`
+const PlantCard = styled.div<{ $isActive: boolean }>`
   padding: 16px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.surface};
   box-shadow: ${({ theme }) => theme.shadows.sm};
-  border: ${({ isActive, theme }) => isActive ? `2px solid ${theme.colors.primary}` : 'none'};
+  border: ${({ $isActive, theme }) => $isActive ? `2px solid ${theme.colors.primary}` : 'none'};
   cursor: pointer;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   
@@ -96,7 +96,7 @@ export const PlantList: React.FC<PlantListProps> = ({ plants, activePlantId, onS
             {plants.map((plant) => (
               <PlantCard
                 key={plant.id}
-                isActive={plant.id === activePlantId}
+                $isActive={plant.id === activePlantId}
                 onClick={() => handleSelectPlant(plant.id)}
               >
                 <PlantHeader>
