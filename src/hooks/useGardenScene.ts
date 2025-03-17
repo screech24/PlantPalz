@@ -262,7 +262,7 @@ export const useGardenScene = (
             if (child.name.includes('pot')) {
               const material = child.material as THREE.MeshStandardMaterial;
               material.name = 'pot';
-              const potColor = getColorValue(plant.pot.color);
+              const potColor = getColorValue(plant.potColor);
               material.color.set(potColor);
               
               // Highlight active plant
