@@ -6,6 +6,22 @@ export type PotType = 'basic' | 'round' | 'square' | 'hexagonal' | 'decorative';
 // Pot colors
 export type PotColor = 'terracotta' | 'white' | 'black' | 'blue' | 'green' | 'purple' | 'yellow' | 'pink';
 
+// Get color value based on pot color (exported for use in other components)
+export const getColorValue = (color: PotColor): string => {
+  const colorMap: Record<PotColor, string> = {
+    terracotta: '#c84c0c',
+    white: '#ffffff',
+    black: '#333333',
+    blue: '#4169e1',
+    green: '#2e8b57',
+    purple: '#9370db',
+    yellow: '#ffd700',
+    pink: '#ff69b4'
+  };
+  
+  return colorMap[color];
+};
+
 // Pot model class
 export class PotModel {
   group: THREE.Group;
