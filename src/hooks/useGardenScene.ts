@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Plant } from '../types';
-import { getColorValue } from '../models/potModels';
+import { getColorValue, PotColor } from '../models/potModels';
 
 export const useGardenScene = (
   plants: Plant[],
@@ -25,6 +25,9 @@ export const useGardenScene = (
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    // Store a reference to the current canvas element to use in cleanup
+    const canvas = canvasRef.current;
+
     // Create scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
@@ -42,10 +45,10 @@ export const useGardenScene = (
 
     // Create renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    canvasRef.current.appendChild(renderer.domElement);
+    canvas.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
     // Create orbit controls
@@ -89,10 +92,10 @@ export const useGardenScene = (
 
     // Handle window resize
     const handleResize = () => {
-      if (!canvasRef.current || !cameraRef.current || !rendererRef.current) return;
+      if (!canvas || !cameraRef.current || !rendererRef.current) return;
       
-      const width = canvasRef.current.clientWidth;
-      const height = canvasRef.current.clientHeight;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
       
       cameraRef.current.aspect = width / height;
       cameraRef.current.updateProjectionMatrix();
@@ -104,11 +107,11 @@ export const useGardenScene = (
 
     // Handle mouse click for plant selection
     const handleMouseClick = (event: MouseEvent) => {
-      if (!canvasRef.current || !cameraRef.current || !sceneRef.current) return;
+      if (!canvas || !cameraRef.current || !sceneRef.current) return;
       
-      const rect = canvasRef.current.getBoundingClientRect();
-      mouseRef.current.x = ((event.clientX - rect.left) / canvasRef.current.clientWidth) * 2 - 1;
-      mouseRef.current.y = -((event.clientY - rect.top) / canvasRef.current.clientHeight) * 2 + 1;
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+      mouseRef.current.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
       
       raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
       
@@ -132,7 +135,7 @@ export const useGardenScene = (
       }
     };
 
-    canvasRef.current.addEventListener('click', handleMouseClick);
+    canvas.addEventListener('click', handleMouseClick);
 
     // Animation loop
     const animate = () => {
@@ -149,13 +152,16 @@ export const useGardenScene = (
     
     animate();
 
+    // Create a copy of the plants map for cleanup
+    const plantsMap = plantsRef.current;
+
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (canvasRef.current) {
-        canvasRef.current.removeEventListener('click', handleMouseClick);
+      if (canvas) {
+        canvas.removeEventListener('click', handleMouseClick);
         if (rendererRef.current) {
-          canvasRef.current.removeChild(rendererRef.current.domElement);
+          canvas.removeChild(rendererRef.current.domElement);
         }
       }
       
@@ -168,7 +174,7 @@ export const useGardenScene = (
         rendererRef.current.dispose();
       }
       
-      plantsRef.current.clear();
+      plantsMap.clear();
     };
   }, [onSelectPlant]);
 
@@ -262,7 +268,7 @@ export const useGardenScene = (
             if (child.name.includes('pot')) {
               const material = child.material as THREE.MeshStandardMaterial;
               material.name = 'pot';
-              const potColor = getColorValue(plant.potColor);
+              const potColor = getColorValue(plant.potColor as PotColor);
               material.color.set(potColor);
               
               // Highlight active plant
