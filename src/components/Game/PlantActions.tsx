@@ -37,7 +37,7 @@ const ResponseContainer = styled.div`
 
 export const PlantActions: React.FC<PlantActionsProps> = ({ plant }) => {
   const [response, setResponse] = useState<string | null>(null);
-  const { waterPlant, fertilizePlant, adjustSunlight, prunePlant } = useGameStore();
+  const { waterPlant, fertilizePlant, adjustSunlight, prunePlant, talkToPlant } = useGameStore();
   
   if (!plant) {
     return (
@@ -77,6 +77,12 @@ export const PlantActions: React.FC<PlantActionsProps> = ({ plant }) => {
     setResponse(response);
   };
   
+  const handleTalk = () => {
+    talkToPlant(plant.id);
+    const response = getPlantResponse(plant, 'talking');
+    setResponse(response);
+  };
+  
   return (
     <Container>
       <Card title="Care Actions">
@@ -95,9 +101,14 @@ export const PlantActions: React.FC<PlantActionsProps> = ({ plant }) => {
           </Button>
         </ActionGrid>
         
-        <Button onClick={handlePrune} variant="primary" fullWidth style={{ marginTop: '12px' }}>
-          Prune
-        </Button>
+        <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+          <Button onClick={handlePrune} variant="primary" fullWidth>
+            Prune
+          </Button>
+          <Button onClick={handleTalk} variant="primary" fullWidth>
+            Talk
+          </Button>
+        </div>
         
         {response && <ResponseContainer>{response}</ResponseContainer>}
       </Card>

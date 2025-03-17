@@ -2,9 +2,9 @@ import { PotType } from '../models/potModels';
 
 export type PlantType = 'succulent' | 'cactus' | 'fern' | 'flowering';
 
-export type PlantPersonality = 'sassy' | 'shy' | 'cheerful';
+export type PlantPersonality = 'sassy' | 'shy' | 'cheerful' | 'grumpy' | 'philosophical' | 'dramatic';
 
-export type CareAction = 'watering' | 'fertilizing' | 'sunlight' | 'pruning';
+export type CareAction = 'watering' | 'fertilizing' | 'sunlight' | 'pruning' | 'talking';
 
 export type ResponseType = 'overwatered' | 'underwatered' | 'perfect';
 
@@ -20,6 +20,20 @@ export type CareHistory = {
   action: CareAction;
   timestamp: number;
   value: number;
+};
+
+export type AchievementCategory = 'care' | 'growth' | 'collection' | 'happiness' | 'special';
+
+export type PlantAchievement = {
+  id: string;
+  title: string;
+  description: string;
+  category: AchievementCategory;
+  icon: string;
+  unlocked: boolean;
+  unlockedAt?: number;
+  progress?: number;
+  maxProgress?: number;
 };
 
 export type Plant = {
@@ -46,7 +60,7 @@ export type GameState = {
   activePlantId: string | null;
   timeScale: number;
   lastUpdate: number;
-  achievements: string[];
+  achievements: PlantAchievement[];
   inventory: {
     pots: string[];
     fertilizers: string[];

@@ -5,6 +5,25 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2023-08-30
+
+### Added
+- Talk to Plant feature that significantly boosts plant happiness
+- Achievements system with different categories (care, growth, collection, happiness, special)
+- More plant personality types (grumpy, philosophical, dramatic)
+- Happiness boosts for optimal care actions (watering, fertilizing, sunlight)
+- Achievement progress tracking and display
+
+### Changed
+- Improved happiness system with reduced decay rate
+- Added minimum happiness floor of 10% to prevent plants from reaching 0 too quickly
+- Enhanced plant responses based on personality types
+- Updated UI to display achievements with filtering by category
+
+### Fixed
+- Fixed issue where plant happiness would plummet to 0 when left unattended
+- Improved happiness recovery mechanisms through various care actions
+
 ## [0.6.1] - 2023-08-27
 
 ### Fixed

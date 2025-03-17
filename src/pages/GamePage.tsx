@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useGameStore } from '../store/gameStore';
 import PlantView from '../components/Game/PlantView';
@@ -9,6 +9,7 @@ import NewPlantForm from '../components/Game/NewPlantForm';
 import ShareModal from '../components/Shared/ShareModal';
 import PlantCustomization from '../components/Game/PlantCustomization';
 import Button from '../components/UI/Button';
+import Achievements from '../components/Game/Achievements';
 
 const Container = styled.div`
   max-width: 1200px;
@@ -49,6 +50,7 @@ const GameGrid = styled.div`
     grid-template-areas: 
       "view stats"
       "view actions"
+      "view customize"
       "view customize";
   }
 `;
@@ -126,6 +128,15 @@ export const GamePage: React.FC = () => {
     setIsShareModalOpen(false);
   };
   
+  // Update game state every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      useGameStore.getState().updateGameState();
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+  
   return (
     <Container>
       <Header>
@@ -158,6 +169,8 @@ export const GamePage: React.FC = () => {
         <CustomizationContainer>
           {activePlant && <PlantCustomization plant={activePlant} />}
         </CustomizationContainer>
+        
+        <Achievements />
       </GameGrid>
       
       <ListContainer>

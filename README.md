@@ -4,13 +4,14 @@ Plant Palz is a virtual plant simulation game where you can grow, nurture, and s
 
 ![Plant Palz Screenshot](public/screenshot.png)
 
-**Current Version: 0.6.1**
+**Current Version: 0.7.0**
 
 ## Features
 
 - **Grow Your Garden**: Start with a seedling and watch it grow through different stages as you care for it.
-- **Interactive Care**: Water, fertilize, prune, and adjust sunlight to keep your plants happy and healthy.
-- **Plant Personalities**: Each plant has a unique personality that affects how it responds to your care.
+- **Interactive Care**: Water, fertilize, prune, adjust sunlight, and talk to your plants to keep them happy and healthy.
+- **Plant Personalities**: Each plant has a unique personality (sassy, shy, cheerful, grumpy, philosophical, or dramatic) that affects how it responds to your care.
+- **Achievements System**: Unlock achievements as you care for your plants and grow your garden.
 - **Share Your Plants**: Share your plants with friends and family via social media or direct links.
 - **Customization**: Choose from different plant types and pot styles, each with unique characteristics.
 - **Time Simulation**: Watch your plants grow over time with adjustable time scales.

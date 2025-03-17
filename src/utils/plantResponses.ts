@@ -69,6 +69,23 @@ const responses: Record<CareAction, Record<ResponseType, string[]>> = {
       "Perfect pruning! I feel lighter and healthier!",
       "Thanks for the haircut! I feel fabulous!"
     ]
+  },
+  talking: {
+    overwatered: [
+      "I'm a bit talked out right now. Let's chat later?",
+      "I appreciate the conversation, but I need some quiet time.",
+      "You're quite chatty today! Maybe I need a little break."
+    ],
+    underwatered: [
+      "It's so nice to hear your voice! I was getting lonely.",
+      "Yes! I love our conversations. Tell me more!",
+      "I've been waiting for someone to talk to. How are you?"
+    ],
+    perfect: [
+      "This is such a lovely chat! I feel so much happier now.",
+      "Talking with you always brightens my day!",
+      "I love our conversations. They make me feel cared for."
+    ]
   }
 };
 
@@ -76,7 +93,10 @@ const responses: Record<CareAction, Record<ResponseType, string[]>> = {
 const personalityModifiers: Record<PlantPersonality, (message: string) => string> = {
   sassy: (message) => message.replace(/\.$/, '!') + ' 💅',
   shy: (message) => message.replace(/!+/g, '.') + ' 🥺',
-  cheerful: (message) => message + ' 😄'
+  cheerful: (message) => message + ' 😄',
+  grumpy: (message) => message.replace(/!+/g, '.').toLowerCase() + ' 😒',
+  philosophical: (message) => message + '... but what does it all mean? 🤔',
+  dramatic: (message) => message.toUpperCase() + '!!! 😱'
 };
 
 // Determine response type based on plant state and action
@@ -110,6 +130,14 @@ export const getResponseType = (plant: Plant, action: CareAction): ResponseType 
       // Pruning response based on growth stage
       if (plant.growthStage < 0.3) return 'overwatered'; // Too early to prune
       if (plant.growthStage > 0.8) return 'underwatered'; // Needs pruning
+      return 'perfect';
+    
+    case 'talking':
+      // Talking response based on happiness and time since last interaction
+      const hoursSinceInteraction = (Date.now() - plant.lastInteraction) / (1000 * 60 * 60);
+      
+      if (hoursSinceInteraction < 0.5) return 'overwatered'; // Talked too recently
+      if (plant.happiness < 40) return 'underwatered'; // Plant needs conversation
       return 'perfect';
     
     default:

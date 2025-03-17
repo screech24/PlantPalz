@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
-import { Plant, PlantType, PlantPersonality, CareAction, GameState } from '../types';
+import { Plant, PlantType, PlantPersonality, CareAction, GameState, PlantAchievement } from '../types';
 import { PotType, PotColor } from '../models/potModels';
+import { initialAchievements, checkAchievements } from '../utils/achievements';
 
 interface GameStore extends GameState {
   // Plant actions
@@ -19,6 +20,7 @@ interface GameStore extends GameState {
   fertilizePlant: (id: string, amount: number) => void;
   adjustSunlight: (id: string, level: number) => void;
   prunePlant: (id: string) => void;
+  talkToPlant: (id: string) => void;
   
   // Time simulation
   updateGameState: () => void;
@@ -29,7 +31,14 @@ interface GameStore extends GameState {
 }
 
 const getRandomPersonality = (): PlantPersonality => {
-  const personalities: PlantPersonality[] = ['sassy', 'shy', 'cheerful'];
+  const personalities: PlantPersonality[] = [
+    'sassy', 
+    'shy', 
+    'cheerful', 
+    'grumpy', 
+    'philosophical', 
+    'dramatic'
+  ];
   return personalities[Math.floor(Math.random() * personalities.length)];
 };
 
@@ -118,12 +127,20 @@ const calculateHealthChange = (plant: Plant, timePassed: number): number => {
 const calculateHappinessChange = (plant: Plant, timePassed: number): number => {
   // Happiness decreases over time if not interacted with
   const hoursSinceInteraction = (Date.now() - plant.lastInteraction) / (1000 * 60 * 60);
-  const interactionDecay = Math.min(5, hoursSinceInteraction * 0.5);
+  const interactionDecay = Math.min(5, hoursSinceInteraction * 0.2); // Reduced from 0.5 to 0.2
   
   // Health affects happiness
   const healthFactor = plant.health / 100;
   
-  return (healthFactor - 0.5) * 5 * (timePassed / (1000 * 60 * 60)) - interactionDecay;
+  // Calculate happiness change
+  const happinessChange = (healthFactor - 0.5) * 5 * (timePassed / (1000 * 60 * 60)) - interactionDecay;
+  
+  // Ensure happiness doesn't fall below 10% due to decay
+  if (plant.happiness <= 10 && happinessChange < 0) {
+    return 0;
+  }
+  
+  return happinessChange;
 };
 
 const updatePlantGrowth = (plant: Plant, timePassed: number): Plant => {
@@ -163,7 +180,7 @@ export const useGameStore = create<GameStore>()(
       activePlantId: null,
       timeScale: 1,
       lastUpdate: Date.now(),
-      achievements: [],
+      achievements: initialAchievements,
       inventory: {
         pots: ['basic_pot'],
         fertilizers: ['basic_fertilizer'],
@@ -225,9 +242,23 @@ export const useGameStore = create<GameStore>()(
           plants: state.plants.map((plant) => {
             if (plant.id === id) {
               const newWaterLevel = Math.max(0, Math.min(100, plant.waterLevel + amount));
+              
+              // Calculate if water level is optimal for this plant type
+              const optimalWaterLevel = {
+                succulent: 30,
+                cactus: 20,
+                fern: 70,
+                flowering: 60,
+              }[plant.type];
+              
+              // Boost happiness if water level is close to optimal
+              const isOptimal = Math.abs(newWaterLevel - optimalWaterLevel) < 15;
+              const happinessBoost = isOptimal ? 5 : 0;
+              
               return {
                 ...plant,
                 waterLevel: newWaterLevel,
+                happiness: Math.min(100, plant.happiness + happinessBoost),
                 lastInteraction: Date.now(),
                 careHistory: [
                   ...plant.careHistory,
@@ -249,9 +280,23 @@ export const useGameStore = create<GameStore>()(
           plants: state.plants.map((plant) => {
             if (plant.id === id) {
               const newFertilizerLevel = Math.max(0, Math.min(100, plant.fertilizerLevel + amount));
+              
+              // Calculate if fertilizer level is optimal for this plant type
+              const optimalFertilizerLevel = {
+                succulent: 30,
+                cactus: 20,
+                fern: 60,
+                flowering: 70,
+              }[plant.type];
+              
+              // Boost happiness if fertilizer level is close to optimal
+              const isOptimal = Math.abs(newFertilizerLevel - optimalFertilizerLevel) < 15;
+              const happinessBoost = isOptimal ? 5 : 0;
+              
               return {
                 ...plant,
                 fertilizerLevel: newFertilizerLevel,
+                happiness: Math.min(100, plant.happiness + happinessBoost),
                 lastInteraction: Date.now(),
                 careHistory: [
                   ...plant.careHistory,
@@ -272,9 +317,26 @@ export const useGameStore = create<GameStore>()(
         set((state) => ({
           plants: state.plants.map((plant) => {
             if (plant.id === id) {
+              const newSunExposure = Math.max(0, Math.min(100, level));
+              
+              // Different optimal ranges based on plant type
+              const optimalSunRanges = {
+                succulent: { min: 60, max: 90 },
+                cactus: { min: 70, max: 95 },
+                fern: { min: 30, max: 60 },
+                flowering: { min: 50, max: 80 }
+              };
+              
+              const range = optimalSunRanges[plant.type];
+              
+              // Boost happiness if sunlight is in optimal range
+              const isOptimal = newSunExposure >= range.min && newSunExposure <= range.max;
+              const happinessBoost = isOptimal ? 5 : 0;
+              
               return {
                 ...plant,
-                sunExposure: Math.max(0, Math.min(100, level)),
+                sunExposure: newSunExposure,
+                happiness: Math.min(100, plant.happiness + happinessBoost),
                 lastInteraction: Date.now(),
                 careHistory: [
                   ...plant.careHistory,
@@ -316,17 +378,47 @@ export const useGameStore = create<GameStore>()(
         }));
       },
       
+      talkToPlant: (id) => {
+        set((state) => ({
+          plants: state.plants.map((plant) => {
+            if (plant.id === id) {
+              // Talking significantly increases happiness
+              return {
+                ...plant,
+                happiness: Math.min(100, plant.happiness + 15),
+                lastInteraction: Date.now(),
+                careHistory: [
+                  ...plant.careHistory,
+                  {
+                    action: 'talking' as CareAction,
+                    timestamp: Date.now(),
+                    value: 1,
+                  },
+                ],
+              };
+            }
+            return plant;
+          }),
+        }));
+      },
+      
       // Time simulation
       updateGameState: () => {
         const currentTime = Date.now();
-        const { lastUpdate, timeScale, plants } = get();
+        const { lastUpdate, timeScale, plants, achievements } = get();
         const timePassed = (currentTime - lastUpdate) * timeScale;
         
         if (timePassed < 1000) return; // Don't update if less than 1 second has passed
         
+        const updatedPlants = plants.map((plant) => updatePlantGrowth(plant, timePassed));
+        
+        // Check for achievements
+        const updatedAchievements = checkAchievements(updatedPlants, achievements);
+        
         set({
           lastUpdate: currentTime,
-          plants: plants.map((plant) => updatePlantGrowth(plant, timePassed)),
+          plants: updatedPlants,
+          achievements: updatedAchievements,
         });
       },
       
@@ -341,7 +433,7 @@ export const useGameStore = create<GameStore>()(
           activePlantId: null,
           timeScale: 1,
           lastUpdate: Date.now(),
-          achievements: [],
+          achievements: initialAchievements,
           inventory: {
             pots: ['basic_pot'],
             fertilizers: ['basic_fertilizer'],
