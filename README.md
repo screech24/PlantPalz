@@ -136,21 +136,22 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Version History
 
-- 0.9.0: Added plant controls to garden view with interactive plant selection
-- 0.8.5: Improved living room dimensions and plant positioning on shelves
-- 0.8.4: Fixed styled-components warnings and improved code quality
-- 0.8.3: Fixed styled-components warnings by using transient props with $ prefix
-- 0.8.2: Fixed ESLint warnings by removing unused imports and variables
-- 0.8.1: Fixed NewPlantForm component compatibility issues
-- 0.8.0: Added garden view with 3D living room scene and day/night cycle
-- 0.7.0: Added Talk to Plant feature and achievements system
-- 0.6.1: Fixed mobile menu navigation issues and improved mobile UX
-- 0.6.0: Added complete set of favicons for better cross-platform support
-- 0.5.2: Improved button styling and game page layout
-- 0.5.0: Added pot customization with different types and colors
-- 0.4.1: Enhanced dark mode implementation across all UI components
-- 0.4.0: Added dark mode theme with toggle in settings
-- 0.3.1: Fixed routing issues for GitHub Pages deployment
-- 0.3.0: Fixed bugs, improved performance, and deployed to GitHub Pages
-- 0.2.0: Added sharing feature
-- 0.1.0: Initial release with basic plant care functionality
+- 0.9.1: Added version number in footer with GitHub changelog link (2025-03-17)
+- 0.9.0: Added plant controls to garden view with interactive plant selection (2025-03-17)
+- 0.8.5: Improved living room dimensions and plant positioning on shelves (2025-03-17)
+- 0.8.4: Fixed styled-components warnings and improved code quality (2025-03-17)
+- 0.8.3: Fixed styled-components warnings by using transient props with $ prefix (2025-03-17)
+- 0.8.2: Fixed ESLint warnings by removing unused imports and variables (2025-03-17)
+- 0.8.1: Fixed NewPlantForm component compatibility issues (2025-03-17)
+- 0.8.0: Added garden view with 3D living room scene and day/night cycle (2025-03-17)
+- 0.7.0: Added Talk to Plant feature and achievements system (2025-03-17)
+- 0.6.1: Fixed mobile menu navigation issues and improved mobile UX (2025-03-16)
+- 0.6.0: Added complete set of favicons for better cross-platform support (2025-03-16)
+- 0.5.2: Improved button styling and game page layout (2025-03-16)
+- 0.5.0: Added pot customization with different types and colors (2025-03-16)
+- 0.4.1: Enhanced dark mode implementation across all UI components (2025-03-16)
+- 0.4.0: Added dark mode theme with toggle in settings (2025-03-16)
+- 0.3.1: Fixed routing issues for GitHub Pages deployment (2025-03-16)
+- 0.3.0: Fixed bugs, improved performance, and deployed to GitHub Pages (2025-03-16)
+- 0.2.0: Added sharing feature (2025-03-16)
+- 0.1.0: Initial release with basic plant care functionality (2025-03-16)

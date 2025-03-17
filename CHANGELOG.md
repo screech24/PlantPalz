@@ -5,13 +5,13 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.9.1] - 2024-07-17
+## [0.9.1] - 2025-03-17
 
 ### Added
 - Version number in the footer with a clickable link to the GitHub changelog
 - Improved mobile layout for the footer
 
-## [0.9.0] - 2024-07-01
+## [0.9.0] - 2025-03-17
 
 ### Added
 - Plant controls (stats, actions, customization) to the garden view
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved garden view layout to accommodate plant controls
 - Consolidated plant stats, actions, and customization into a single component
 
-## [0.8.5] - 2024-06-17
+## [0.8.5] - 2025-03-17
 
 ### Changed
 - Increased living room dimensions for a more spacious environment
@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Raised grow light position to make more room for plants
 - Optimized plant distribution on shelves (4 plants per shelf instead of 2)
 
-## [0.8.4] - 2024-06-10
+## [0.8.4] - 2025-03-17
 
 ### Fixed
 - Removed @import CSS syntax from styled-components GlobalStyle and moved Google Fonts to index.html
@@ -49,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated CategoryTab component to use $active prop
 - Resolved React DOM warnings about unknown props being passed to DOM elements
 
-## [0.8.3] - 2024-05-23
+## [0.8.3] - 2025-03-17
 
 ### Fixed
 - Fixed styled-components warnings by using transient props with $ prefix
@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated PlantCustomization component to use $isActive and $color props
 - Resolved React DOM warnings about unknown props being passed to DOM elements
 
-## [0.8.2] - 2024-05-22
+## [0.8.2] - 2025-03-17
 
 ### Fixed
 - Removed unused imports and variables to fix ESLint warnings
@@ -68,13 +68,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed unused 'environment' and 'shelfWidth' variables in useGardenScene.ts
 - Removed unused 'curtainDepth' variable in environmentModels.ts
 
-## [0.8.1] - 2024-05-20
+## [0.8.1] - 2025-03-17
 
 ### Fixed
 - Made the `isOpen` prop optional in the NewPlantForm component to fix compatibility issues when used within Modal components
 - Added default value of `true` for the `isOpen` prop to maintain backward compatibility
 
-## [0.8.0] - 2024-05-17
+## [0.8.0] - 2025-03-17
 
 ### Added
 - Garden view with 3D living room scene showing all plants together
@@ -90,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated plant sunlight mechanics to be affected by curtains and grow light
 - Reorganized game page layout for better integration of garden view
 
-## [0.7.0] - 2024-03-17
+## [0.7.0] - 2025-03-17
 
 ### Added
 - Talk to Plant feature that significantly boosts plant happiness
@@ -109,14 +109,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed issue where plant happiness would plummet to 0 when left unattended
 - Improved happiness recovery mechanisms through various care actions
 
-## [0.6.1] - 2023-08-27
+## [0.6.1] - 2025-03-16
 
 ### Fixed
 - Mobile menu now closes properly when navigating to the Settings page
 - Added ability to close the mobile menu by clicking outside of it
 - Improved mobile navigation experience with better menu handling
 
-## [0.6.0] - 2023-08-26
+## [0.6.0] - 2025-03-16
 
 ### Added
 - Complete set of favicon files for better cross-platform support
@@ -129,7 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated theme color in manifest and meta tags to match app's green theme
 - Improved PWA support with proper icons and manifest settings
 
-## [0.5.2] - 2023-08-25
+## [0.5.2] - 2025-03-16
 
 ### Added
 - New 'water' button variant with blue color for better visual distinction
@@ -142,7 +142,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved button group responsiveness on small screens
 - Separated plant customization into its own grid area for better organization
 
-## [0.5.1] - 2023-08-22
+## [0.5.1] - 2025-03-16
 
 ### Fixed
 - Improved button styling consistency across the game interface
@@ -152,7 +152,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed loading overlay and empty states to support dark mode properly
 - Removed all hardcoded color values for better theme consistency
 
-## [0.5.0] - 2023-08-20
+## [0.5.0] - 2025-03-16
 
 ### Added
 - Pot customization feature with different pot types (basic, round, square, hexagonal, decorative)
@@ -171,7 +171,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced GameStore with pot type and color update functions
 - Improved overall visual consistency of pot models
 
-## [0.4.1] - 2023-08-15
+## [0.4.1] - 2025-03-16
 
 ### Fixed
 - Comprehensive dark mode implementation across all UI components
@@ -187,7 +187,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved overall UI consistency in both light and dark modes
 - Added color transitions for smoother theme switching
 
-## [0.4.0] - 2023-08-10
+## [0.4.0] - 2025-03-16
 
 ### Added
 - Dark mode theme with toggle switch in settings
@@ -199,14 +199,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved UI contrast in both light and dark modes
 - Enhanced accessibility for color-sensitive users
 
-## [0.3.1] - 2023-07-25
+## [0.3.1] - 2025-03-16
 
 ### Fixed
 - Routing issues with GitHub Pages by switching to HashRouter
 - Added 404.html page for better handling of direct URL access
 - Updated index.html with proper redirects for SPA on GitHub Pages
 
-## [0.3.0] - 2023-07-20
+## [0.3.0] - 2025-03-16
 
 ### Added
 - GitHub Pages deployment configuration
@@ -222,7 +222,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compilation issues for production build
 - UI rendering issues on smaller screens
 
-## [0.2.0] - 2023-06-15
+## [0.2.0] - 2025-03-16
 
 ### Added
 - Sharing feature that allows users to share plants via unique URLs
@@ -242,7 +242,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Various styling issues in mobile view
 - Plant response handling edge cases
 
-## [0.1.0] - 2023-05-01
+## [0.1.0] - 2025-03-16
 
 ### Added
 - Initial release of Plant Palz
