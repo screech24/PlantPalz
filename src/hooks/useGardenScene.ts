@@ -197,9 +197,10 @@ export const useGardenScene = ({
       const shelfIndex = Math.floor(index / numPlantsPerShelf);
       const positionOnShelf = index % numPlantsPerShelf;
       
-      const x = (positionOnShelf * 3) - 4.5; // Adjusted spacing for more plants
+      // Adjust spacing to spread plants more evenly across the shelf
+      const x = (positionOnShelf * 2.5) - 3.75; // More evenly distributed
       const y = shelfIndex * 1.5 + 1.2; // Adjusted for new shelf height (1.5)
-      const z = -6; // Align with shelf
+      const z = -5.8; // Slightly forward to be more visible
       
       // Create or update pot
       let potModel = potModelsRef.current.get(plant.id);
@@ -248,6 +249,9 @@ export const useGardenScene = ({
             }
           }
         });
+        
+        // Add a slight scale increase to make the selected plant more noticeable
+        plantModel.group.scale.set(0.55, 0.55, 0.55);
       } else {
         // Remove highlight from inactive plants
         plantModel.group.traverse((object) => {
@@ -263,6 +267,9 @@ export const useGardenScene = ({
             }
           }
         });
+        
+        // Reset scale for non-selected plants
+        plantModel.group.scale.set(0.5, 0.5, 0.5);
       }
     });
     

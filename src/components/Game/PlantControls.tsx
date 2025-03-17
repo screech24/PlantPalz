@@ -14,19 +14,30 @@ interface PlantControlsProps {
 const Container = styled.div`
   position: absolute;
   top: 16px;
-  left: 16px;
-  width: 300px;
+  right: 16px;
+  width: 280px;
   max-width: calc(100% - 32px);
-  max-height: calc(100% - 80px);
+  max-height: calc(100% - 100px);
   overflow-y: auto;
   z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  transition: opacity 0.3s ease;
+  opacity: 0.9;
+  
+  &:hover {
+    opacity: 1;
+  }
   
   @media (min-width: 768px) {
-    width: 350px;
+    width: 300px;
   }
+`;
+
+const StyledCard = styled(Card)`
+  background-color: ${({ theme }) => `rgba(${theme.isDark ? '30, 30, 30, 0.85' : '255, 255, 255, 0.85'})`};
+  backdrop-filter: blur(5px);
 `;
 
 const StatsGrid = styled.div`
@@ -233,7 +244,7 @@ export const PlantControls: React.FC<PlantControlsProps> = ({ plantId }) => {
   
   return (
     <Container>
-      <Card>
+      <StyledCard>
         <PlantName>{plant.name}</PlantName>
         <PlantType>{plant.type} Plant ({plant.personality})</PlantType>
         
@@ -405,7 +416,7 @@ export const PlantControls: React.FC<PlantControlsProps> = ({ plantId }) => {
             </CustomizationGrid>
           </>
         )}
-      </Card>
+      </StyledCard>
     </Container>
   );
 };
