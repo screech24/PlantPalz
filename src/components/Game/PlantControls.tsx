@@ -13,11 +13,11 @@ interface PlantControlsProps {
 
 const Container = styled.div`
   position: absolute;
-  top: 16px;
+  bottom: 80px;
   right: 16px;
   width: 280px;
   max-width: calc(100% - 32px);
-  max-height: calc(100% - 100px);
+  max-height: calc(100% - 120px);
   overflow-y: auto;
   z-index: 10;
   display: flex;

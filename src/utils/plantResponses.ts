@@ -145,6 +145,66 @@ export const getResponseType = (plant: Plant, action: CareAction): ResponseType 
   }
 };
 
+// Function to get a random response from an array
+const getRandomResponse = (responses: string[]): string => {
+  const randomIndex = Math.floor(Math.random() * responses.length);
+  return responses[randomIndex];
+};
+
+// Get a general mood response based on plant health and happiness
+export const getMoodResponse = (plant: Plant): string => {
+  // Calculate overall mood based on health and happiness
+  const overallMood = (plant.health + plant.happiness) / 2;
+  
+  if (overallMood < 30) {
+    return getRandomResponse([
+      "Help me...",
+      "Not doing well...",
+      "I need care...",
+      "Feeling weak...",
+      "SOS!",
+    ]);
+  }
+  
+  if (overallMood < 50) {
+    return getRandomResponse([
+      "Could be better...",
+      "Hanging in there",
+      "Seen better days",
+      "Need some TLC",
+      "Meh...",
+    ]);
+  }
+  
+  if (overallMood < 70) {
+    return getRandomResponse([
+      "I'm okay",
+      "Not bad",
+      "Doing alright",
+      "Getting by",
+      "Hi there",
+    ]);
+  }
+  
+  if (overallMood < 90) {
+    return getRandomResponse([
+      "Feeling good!",
+      "Happy to see you!",
+      "Life is nice",
+      "Growing strong",
+      "Thanks for the care!",
+    ]);
+  }
+  
+  return getRandomResponse([
+    "Thriving!",
+    "Absolutely perfect!",
+    "Couldn't be happier!",
+    "Living my best life!",
+    "You're the best plant parent!",
+  ]);
+};
+
 // Get a response based on plant state, action, and personality
 export const getPlantResponse = (plant: Plant, action: CareAction): string => {
   const responseType = getResponseType(plant, action);
@@ -155,25 +215,4 @@ export const getPlantResponse = (plant: Plant, action: CareAction): string => {
   
   // Apply personality modifier
   return personalityModifiers[plant.personality](baseResponse);
-};
-
-// Get a general mood response based on plant health and happiness
-export const getMoodResponse = (plant: Plant): string => {
-  if (plant.health < 30 && plant.happiness < 30) {
-    return personalityModifiers[plant.personality]("I'm not feeling so good...");
-  }
-  
-  if (plant.health > 80 && plant.happiness > 80) {
-    return personalityModifiers[plant.personality]("I'm thriving! Life is good!");
-  }
-  
-  if (plant.health < 50) {
-    return personalityModifiers[plant.personality]("I could use some better care...");
-  }
-  
-  if (plant.happiness < 50) {
-    return personalityModifiers[plant.personality]("I'm a bit lonely. Let's hang out more!");
-  }
-  
-  return personalityModifiers[plant.personality]("I'm doing okay today.");
 }; 

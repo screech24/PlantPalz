@@ -1,84 +1,74 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useGameStore } from '../../store/gameStore';
 import { useGardenScene } from '../../hooks/useGardenScene';
+import { getMoodResponse } from '../../utils/plantResponses';
 import Button from '../UI/Button';
 import PlantControls from './PlantControls';
 
 const Container = styled.div`
-  width: 100%;
-  height: 500px;
   position: relative;
-  border-radius: 12px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  
-  @media (min-width: 768px) {
-    height: 600px;
-  }
 `;
 
-const LoadingOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme }) => `rgba(${theme.isDark ? '0, 0, 0' : '255, 255, 255'}, 0.8)`};
-  z-index: 10;
+const CanvasContainer = styled.div`
+  width: 100%;
+  height: 100%;
 `;
 
 const ControlsOverlay = styled.div`
   position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
-  gap: 16px;
-  z-index: 10;
-`;
-
-const TimeIndicator = styled.div`
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background-color: ${({ theme }) => theme.colors.surface};
-  border-radius: 20px;
-  padding: 8px 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  
-  svg {
-    width: 20px;
-    height: 20px;
-  }
+  z-index: 5;
 `;
 
 const EmptyState = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.colors.surface};
-  border-radius: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text};
+  padding: 20px;
+  border-radius: 8px;
+  background-color: ${({ theme }) => `rgba(${theme.isDark ? '30, 30, 30, 0.8' : '255, 255, 255, 0.8'})`};
+  backdrop-filter: blur(5px);
+  z-index: 5;
+`;
+
+const SpeechBubble = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  max-width: 300px;
+  padding: 12px 16px;
+  background-color: ${({ theme }) => `rgba(${theme.isDark ? '30, 30, 30, 0.85' : '255, 255, 255, 0.85'})`};
+  color: ${({ theme }) => theme.colors.text};
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  z-index: 10;
+  animation: fadeIn 0.3s ease-in-out;
   
-  h3 {
-    margin-bottom: 8px;
-    color: ${({ theme }) => theme.colors.text.secondary};
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 20px;
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: ${({ theme }) => `rgba(${theme.isDark ? '30, 30, 30, 0.85' : '255, 255, 255, 0.85'})`} transparent transparent;
   }
   
-  p {
-    color: ${({ theme }) => theme.colors.text.secondary};
-    text-align: center;
-    max-width: 80%;
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 `;
 
@@ -98,69 +88,43 @@ const MoonIcon = () => (
 
 export const GardenView: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const plants = useGameStore((state) => state.plants);
-  const isDaytime = useGameStore((state) => state.isDaytime);
-  const isCurtainsOpen = useGameStore((state) => state.isCurtainsOpen);
-  const isGrowLightOn = useGameStore((state) => state.isGrowLightOn);
-  const toggleCurtains = useGameStore((state) => state.toggleCurtains);
-  const toggleGrowLight = useGameStore((state) => state.toggleGrowLight);
-  const activePlantId = useGameStore((state) => state.activePlantId);
-  const setActivePlant = useGameStore((state) => state.setActivePlant);
+  const { plants, activePlantId, setActivePlantId } = useGameStore();
+  const canvasRef = useGardenScene(plants, activePlantId, setActivePlantId);
+  const [moodMessage, setMoodMessage] = useState<string | null>(null);
   
-  const { isLoading } = useGardenScene({
-    containerRef: containerRef as React.RefObject<HTMLDivElement>,
-    plants,
-    isDaytime,
-    isCurtainsOpen,
-    isGrowLightOn,
-    activePlantId,
-    onToggleCurtains: toggleCurtains,
-    onToggleGrowLight: toggleGrowLight,
-    onSelectPlant: setActivePlant
-  });
-  
-  // If no plants, show empty state
-  if (plants.length === 0) {
-    return (
-      <Container>
-        <EmptyState>
-          <h3>Your Garden is Empty</h3>
-          <p>Create some plants to see them displayed in your garden.</p>
-        </EmptyState>
-      </Container>
-    );
-  }
-  
+  useEffect(() => {
+    if (activePlantId) {
+      const activePlant = plants.find(p => p.id === activePlantId);
+      if (activePlant) {
+        setMoodMessage(getMoodResponse(activePlant));
+      } else {
+        setMoodMessage(null);
+      }
+    } else {
+      setMoodMessage(null);
+    }
+  }, [activePlantId, plants]);
+
   return (
-    <Container ref={containerRef}>
-      {isLoading && (
-        <LoadingOverlay>
-          <p>Loading garden...</p>
-        </LoadingOverlay>
+    <Container>
+      <CanvasContainer ref={canvasRef} />
+      
+      {moodMessage && activePlantId && (
+        <SpeechBubble>
+          {moodMessage}
+        </SpeechBubble>
       )}
       
-      <TimeIndicator>
-        {isDaytime ? <SunIcon /> : <MoonIcon />}
-        {isDaytime ? 'Day' : 'Night'}
-      </TimeIndicator>
-      
-      {activePlantId && <PlantControls plantId={activePlantId} />}
-      
       <ControlsOverlay>
-        <Button 
-          onClick={toggleCurtains}
-          variant="secondary"
-        >
-          {isCurtainsOpen ? 'Close Curtains' : 'Open Curtains'}
-        </Button>
-        
-        <Button 
-          onClick={toggleGrowLight}
-          variant="secondary"
-        >
-          {isGrowLightOn ? 'Turn Off Grow Light' : 'Turn On Grow Light'}
-        </Button>
+        {activePlantId && <PlantControls plantId={activePlantId} />}
       </ControlsOverlay>
+      
+      {plants.length === 0 && (
+        <EmptyState>
+          <h3>Your garden is empty!</h3>
+          <p>Add some plants to get started.</p>
+        </EmptyState>
+      )}
     </Container>
   );
 };

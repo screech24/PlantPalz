@@ -1,398 +1,298 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { createPlantModel } from '../models/plantModels';
-import { createPotModel } from '../models/potModels';
-import { createEnvironmentModel } from '../models/environmentModels';
-import { Plant } from '../types';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Plant } from '../models/plantModels';
+import { getColorValue } from '../models/potModels';
 
-interface UseGardenSceneProps {
-  containerRef: React.RefObject<HTMLDivElement>;
-  plants: Plant[];
-  isDaytime: boolean;
-  isCurtainsOpen: boolean;
-  isGrowLightOn: boolean;
-  activePlantId: string | null;
-  onToggleCurtains: () => void;
-  onToggleGrowLight: () => void;
-  onSelectPlant: (plantId: string) => void;
-}
-
-export const useGardenScene = ({
-  containerRef,
-  plants,
-  isDaytime,
-  isCurtainsOpen,
-  isGrowLightOn,
-  activePlantId,
-  onToggleCurtains,
-  onToggleGrowLight,
-  onSelectPlant
-}: UseGardenSceneProps) => {
+export const useGardenScene = (
+  plants: Plant[],
+  activePlantId: string | null,
+  onSelectPlant: (plantId: string | null) => void
+) => {
+  const canvasRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
-  const environmentRef = useRef<ReturnType<typeof createEnvironmentModel> | null>(null);
-  const plantModelsRef = useRef<Map<string, ReturnType<typeof createPlantModel>>>(new Map());
-  const potModelsRef = useRef<Map<string, ReturnType<typeof createPotModel>>>(new Map());
-  const [isLoading, setIsLoading] = useState(true);
-  
-  // Initialize Three.js scene
+  const plantsRef = useRef<Map<string, THREE.Object3D>>(new Map());
+  const roomModelRef = useRef<THREE.Object3D | null>(null);
+  const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
+  const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
+  const frameIdRef = useRef<number | null>(null);
+
+  // Initialize the scene
   useEffect(() => {
-    if (!containerRef.current) return;
-    
-    // Store a reference to the container element
-    const container = containerRef.current;
-    
-    // Initialize scene
+    if (!canvasRef.current) return;
+
+    // Create scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
     sceneRef.current = scene;
-    
-    // Initialize camera
+
+    // Create camera
     const camera = new THREE.PerspectiveCamera(
-      50,
-      container.clientWidth / container.clientHeight,
+      45, // Field of view (reduced for better plant visibility)
+      window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
-    camera.position.set(0, 5, 10);
+    camera.position.set(0, 4, 8); // Adjusted position for better plant visibility
     cameraRef.current = camera;
-    
-    // Initialize renderer
+
+    // Create renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
     renderer.shadowMap.enabled = true;
-    container.appendChild(renderer.domElement);
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    canvasRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
-    
-    // Add orbit controls
+
+    // Create orbit controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.minDistance = 5;
-    controls.maxDistance = 20;
+    controls.minDistance = 3; // Closer minimum distance
+    controls.maxDistance = 15; // Farther maximum distance
     controls.maxPolarAngle = Math.PI / 2;
-    controls.minAzimuthAngle = -Math.PI / 2;
-    controls.maxAzimuthAngle = Math.PI / 2;
-    controls.target.set(0, 3, -5);
+    controls.target.set(0, 2, 0); // Focus on the center of the scene
     controlsRef.current = controls;
-    
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+
+    // Add lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // Increased intensity
     scene.add(ambientLight);
-    
-    // Create environment
-    const environment = createEnvironmentModel();
-    scene.add(environment.group);
-    environmentRef.current = environment;
-    
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate);
-      
-      if (controlsRef.current) {
-        controlsRef.current.update();
-      }
-      
-      if (rendererRef.current && cameraRef.current && sceneRef.current) {
-        rendererRef.current.render(sceneRef.current, cameraRef.current);
-      }
-    };
-    
-    animate();
-    setIsLoading(false);
-    
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(5, 10, 5);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 50;
+    scene.add(directionalLight);
+
+    // Load room model
+    const loader = new GLTFLoader();
+    loader.load('/models/living_room.glb', (gltf) => {
+      const model = gltf.scene;
+      model.scale.set(2, 2, 2);
+      model.position.set(0, 0, 0);
+      model.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+      scene.add(model);
+      roomModelRef.current = model;
+    });
+
     // Handle window resize
     const handleResize = () => {
-      if (!containerRef.current || !cameraRef.current || !rendererRef.current) return;
+      if (!canvasRef.current || !cameraRef.current || !rendererRef.current) return;
       
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
+      const width = canvasRef.current.clientWidth;
+      const height = canvasRef.current.clientHeight;
       
       cameraRef.current.aspect = width / height;
       cameraRef.current.updateProjectionMatrix();
       
       rendererRef.current.setSize(width, height);
     };
-    
+
     window.addEventListener('resize', handleResize);
-    
-    // Clean up
-    return () => {
-      window.removeEventListener('resize', handleResize);
+
+    // Handle mouse click for plant selection
+    const handleMouseClick = (event: MouseEvent) => {
+      if (!canvasRef.current || !cameraRef.current || !sceneRef.current) return;
       
-      if (rendererRef.current && container) {
-        container.removeChild(rendererRef.current.domElement);
+      const rect = canvasRef.current.getBoundingClientRect();
+      mouseRef.current.x = ((event.clientX - rect.left) / canvasRef.current.clientWidth) * 2 - 1;
+      mouseRef.current.y = -((event.clientY - rect.top) / canvasRef.current.clientHeight) * 2 + 1;
+      
+      raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
+      
+      const plantObjects = Array.from(plantsRef.current.values());
+      const intersects = raycasterRef.current.intersectObjects(plantObjects, true);
+      
+      if (intersects.length > 0) {
+        let selectedPlantId: string | null = null;
+        
+        // Find the plant ID from the intersected object
+        for (const [id, obj] of plantsRef.current.entries()) {
+          if (obj === intersects[0].object || obj.getObjectById(intersects[0].object.id)) {
+            selectedPlantId = id;
+            break;
+          }
+        }
+        
+        onSelectPlant(selectedPlantId);
+      } else {
+        onSelectPlant(null);
+      }
+    };
+
+    canvasRef.current.addEventListener('click', handleMouseClick);
+
+    // Animation loop
+    const animate = () => {
+      frameIdRef.current = requestAnimationFrame(animate);
+      
+      if (controlsRef.current) {
+        controlsRef.current.update();
       }
       
+      if (rendererRef.current && sceneRef.current && cameraRef.current) {
+        rendererRef.current.render(sceneRef.current, cameraRef.current);
+      }
+    };
+    
+    animate();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (canvasRef.current) {
+        canvasRef.current.removeEventListener('click', handleMouseClick);
+        if (rendererRef.current) {
+          canvasRef.current.removeChild(rendererRef.current.domElement);
+        }
+      }
+      
+      if (frameIdRef.current !== null) {
+        cancelAnimationFrame(frameIdRef.current);
+      }
+      
+      // Dispose of Three.js resources
       if (rendererRef.current) {
         rendererRef.current.dispose();
       }
       
-      if (sceneRef.current) {
-        // Dispose of all geometries and materials
-        sceneRef.current.traverse((object) => {
-          if (object instanceof THREE.Mesh) {
-            object.geometry.dispose();
-            
-            if (Array.isArray(object.material)) {
-              object.material.forEach((material) => material.dispose());
-            } else {
-              object.material.dispose();
-            }
-          }
-        });
-      }
+      plantsRef.current.clear();
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  
-  // Update environment state when props change
+  }, [onSelectPlant]);
+
+  // Update plants in the scene
   useEffect(() => {
-    if (!environmentRef.current) return;
-    
-    const environment = environmentRef.current;
-    
-    // Update environment state
-    environment.isDaytime = isDaytime;
-    environment.isCurtainsOpen = isCurtainsOpen;
-    environment.isGrowLightOn = isGrowLightOn;
-    
-    // Update visual elements
-    environment.updateCurtains();
-    environment.updateGrowLight();
-    
-  }, [isDaytime, isCurtainsOpen, isGrowLightOn]);
-  
-  // Update plants when they change
-  useEffect(() => {
-    if (!sceneRef.current || !environmentRef.current) return;
+    if (!sceneRef.current) return;
     
     const scene = sceneRef.current;
-    
-    // Track current plant IDs
-    const currentPlantIds = new Set(plants.map(p => p.id));
+    const currentPlantIds = new Set(plants.map(plant => plant.id));
     
     // Remove plants that are no longer in the list
-    for (const [id, model] of plantModelsRef.current.entries()) {
+    for (const [id, obj] of plantsRef.current.entries()) {
       if (!currentPlantIds.has(id)) {
-        scene.remove(model.group);
-        plantModelsRef.current.delete(id);
-      }
-    }
-    
-    for (const [id, model] of potModelsRef.current.entries()) {
-      if (!currentPlantIds.has(id)) {
-        scene.remove(model.group);
-        potModelsRef.current.delete(id);
+        scene.remove(obj);
+        plantsRef.current.delete(id);
       }
     }
     
     // Add or update plants
     plants.forEach((plant, index) => {
-      // Calculate position on shelf
-      const numPlantsPerShelf = 4; // Increased from 2 to allow more plants per shelf
-      const shelfIndex = Math.floor(index / numPlantsPerShelf);
-      const positionOnShelf = index % numPlantsPerShelf;
+      const loader = new GLTFLoader();
       
-      // Adjust spacing to spread plants more evenly across the shelf
-      const x = (positionOnShelf * 2.5) - 3.75; // More evenly distributed
-      const y = shelfIndex * 1.5 + 1.2; // Adjusted for new shelf height (1.5)
-      const z = -5.8; // Slightly forward to be more visible
+      // Calculate position based on index
+      // Arrange plants in a grid with 3 plants per shelf for better visibility
+      const plantsPerShelf = 3;
+      const shelfIndex = Math.floor(index / plantsPerShelf);
+      const positionOnShelf = index % plantsPerShelf;
       
-      // Create or update pot
-      let potModel = potModelsRef.current.get(plant.id);
-      if (!potModel) {
-        potModel = createPotModel(plant.potType, plant.potColor as any);
-        potModelsRef.current.set(plant.id, potModel);
-        scene.add(potModel.group);
-      } else {
-        potModel.type = plant.potType;
-        potModel.setColor(plant.potColor as any);
-        potModel.generate();
+      // Calculate x position with more spacing between plants
+      const xSpacing = 1.5; // Increased spacing
+      const xOffset = (plantsPerShelf - 1) * xSpacing / 2;
+      const x = positionOnShelf * xSpacing - xOffset;
+      
+      // Calculate y position (height) based on shelf
+      const y = 1.5 + shelfIndex * 1.2;
+      
+      // Position plants slightly forward for better visibility
+      const z = -1.5 + shelfIndex * 0.5;
+      
+      // If the plant already exists in the scene, just update its position
+      if (plantsRef.current.has(plant.id)) {
+        const plantObj = plantsRef.current.get(plant.id)!;
+        plantObj.position.set(x, y, z);
+        
+        // Highlight the active plant
+        if (plant.id === activePlantId) {
+          // Scale up the active plant slightly
+          plantObj.scale.set(1.1, 1.1, 1.1);
+          
+          // Find the pot material and make it more emissive
+          plantObj.traverse((child) => {
+            if (child instanceof THREE.Mesh && child.material) {
+              const material = child.material as THREE.MeshStandardMaterial;
+              if (material.name === 'pot') {
+                material.emissive.set(0x333333);
+                material.emissiveIntensity = 0.5;
+              }
+            }
+          });
+        } else {
+          // Reset scale and emissive for non-active plants
+          plantObj.scale.set(1, 1, 1);
+          
+          plantObj.traverse((child) => {
+            if (child instanceof THREE.Mesh && child.material) {
+              const material = child.material as THREE.MeshStandardMaterial;
+              if (material.name === 'pot') {
+                material.emissive.set(0x000000);
+                material.emissiveIntensity = 0;
+              }
+            }
+          });
+        }
+        
+        return;
       }
       
-      // Position pot
-      potModel.group.position.set(x, y, z);
-      potModel.group.scale.set(0.5, 0.5, 0.5); // Scale down to fit on shelf
-      
-      // Create or update plant
-      let plantModel = plantModelsRef.current.get(plant.id);
-      if (!plantModel) {
-        plantModel = createPlantModel(plant.type, plant.growthStage);
-        plantModelsRef.current.set(plant.id, plantModel);
-        scene.add(plantModel.group);
-      } else {
-        plantModel.type = plant.type;
-        plantModel.updateGrowth(plant.growthStage);
-      }
-      
-      // Position plant on top of pot
-      plantModel.group.position.set(x, y + 0.2, z);
-      plantModel.group.scale.set(0.5, 0.5, 0.5); // Scale down to fit on shelf
-      
-      // Highlight active plant
-      if (plant.id === activePlantId) {
-        // Add a subtle glow or highlight to the active plant
-        plantModel.group.traverse((object) => {
-          if (object instanceof THREE.Mesh) {
-            if (Array.isArray(object.material)) {
-              object.material.forEach(mat => {
-                if (mat instanceof THREE.MeshStandardMaterial) {
-                  mat.emissive.set(0x333333);
-                }
-              });
-            } else if (object.material instanceof THREE.MeshStandardMaterial) {
-              object.material.emissive.set(0x333333);
+      // Load the plant model
+      loader.load('/models/plant.glb', (gltf) => {
+        const model = gltf.scene;
+        model.position.set(x, y, z);
+        model.scale.set(1, 1, 1);
+        
+        // Apply pot color
+        model.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            
+            // Set pot color
+            if (child.name.includes('pot')) {
+              const material = child.material as THREE.MeshStandardMaterial;
+              material.name = 'pot';
+              const potColor = getColorValue(plant.pot.color);
+              material.color.set(potColor);
+              
+              // Highlight active plant
+              if (plant.id === activePlantId) {
+                material.emissive.set(0x333333);
+                material.emissiveIntensity = 0.5;
+                model.scale.set(1.1, 1.1, 1.1);
+              }
+            }
+            
+            // Set plant color based on health
+            if (child.name.includes('leaf')) {
+              const material = child.material as THREE.MeshStandardMaterial;
+              
+              // Calculate color based on health
+              const healthPercent = plant.health / 100;
+              const r = Math.max(0, 1 - healthPercent);
+              const g = Math.min(1, 0.2 + healthPercent * 0.8);
+              const b = Math.max(0, 0.2 - healthPercent * 0.2);
+              
+              material.color.setRGB(r, g, b);
             }
           }
         });
         
-        // Add a slight scale increase to make the selected plant more noticeable
-        plantModel.group.scale.set(0.55, 0.55, 0.55);
-      } else {
-        // Remove highlight from inactive plants
-        plantModel.group.traverse((object) => {
-          if (object instanceof THREE.Mesh) {
-            if (Array.isArray(object.material)) {
-              object.material.forEach(mat => {
-                if (mat instanceof THREE.MeshStandardMaterial) {
-                  mat.emissive.set(0x000000);
-                }
-              });
-            } else if (object.material instanceof THREE.MeshStandardMaterial) {
-              object.material.emissive.set(0x000000);
-            }
-          }
-        });
-        
-        // Reset scale for non-selected plants
-        plantModel.group.scale.set(0.5, 0.5, 0.5);
-      }
+        scene.add(model);
+        plantsRef.current.set(plant.id, model);
+      });
     });
-    
   }, [plants, activePlantId]);
-  
-  // Add click handlers for interactive elements
-  useEffect(() => {
-    if (!containerRef.current || !rendererRef.current || !cameraRef.current || !sceneRef.current) return;
-    
-    const container = containerRef.current;
-    const renderer = rendererRef.current;
-    const camera = cameraRef.current;
-    const scene = sceneRef.current;
-    
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    
-    const handleClick = (event: MouseEvent) => {
-      // Calculate mouse position in normalized device coordinates
-      const rect = renderer.domElement.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      
-      // Update the picking ray with the camera and mouse position
-      raycaster.setFromCamera(mouse, camera);
-      
-      // Find all intersected objects
-      const intersects = raycaster.intersectObjects(scene.children, true);
-      
-      if (intersects.length > 0) {
-        // Check if we clicked on the curtains
-        const curtainIntersect = intersects.find(intersect => {
-          let obj = intersect.object;
-          while (obj.parent) {
-            if (obj.parent === environmentRef.current?.curtains) {
-              return true;
-            }
-            obj = obj.parent;
-          }
-          return false;
-        });
-        
-        if (curtainIntersect) {
-          onToggleCurtains();
-          return;
-        }
-        
-        // Check if we clicked on the grow light
-        const lightIntersect = intersects.find(intersect => {
-          let obj = intersect.object;
-          while (obj.parent) {
-            if (obj.parent === environmentRef.current?.growLight) {
-              return true;
-            }
-            obj = obj.parent;
-          }
-          return false;
-        });
-        
-        if (lightIntersect) {
-          onToggleGrowLight();
-          return;
-        }
-        
-        // Check if we clicked on a plant or pot
-        for (const [plantId, plantModel] of plantModelsRef.current.entries()) {
-          const plantIntersect = intersects.find(intersect => {
-            let obj = intersect.object;
-            while (obj.parent) {
-              if (obj.parent === plantModel.group) {
-                return true;
-              }
-              obj = obj.parent;
-            }
-            return false;
-          });
-          
-          if (plantIntersect) {
-            onSelectPlant(plantId);
-            return;
-          }
-        }
-        
-        // Check if we clicked on a pot
-        for (const [plantId, potModel] of potModelsRef.current.entries()) {
-          const potIntersect = intersects.find(intersect => {
-            let obj = intersect.object;
-            while (obj.parent) {
-              if (obj.parent === potModel.group) {
-                return true;
-              }
-              obj = obj.parent;
-            }
-            return false;
-          });
-          
-          if (potIntersect) {
-            onSelectPlant(plantId);
-            return;
-          }
-        }
-      }
-    };
-    
-    container.addEventListener('click', handleClick);
-    
-    return () => {
-      container.removeEventListener('click', handleClick);
-    };
-  }, [onToggleCurtains, onToggleGrowLight, onSelectPlant]);
-  
-  return {
-    isLoading,
-    takeScreenshot: () => {
-      if (!rendererRef.current) return null;
-      
-      // Render the scene
-      if (sceneRef.current && cameraRef.current) {
-        rendererRef.current.render(sceneRef.current, cameraRef.current);
-      }
-      
-      // Get the canvas data URL
-      return rendererRef.current.domElement.toDataURL('image/png');
-    }
-  };
+
+  return canvasRef;
 }; 
