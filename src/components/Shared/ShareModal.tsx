@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Plant } from '../../types';
 import { getShareUrl, copyShareLink, shareToSocialMedia, captureScreenshot } from '../../utils/sharing';
 import Modal from '../UI/Modal';
 import Button from '../UI/Button';

@@ -165,7 +165,6 @@ export const useGardenScene = ({
     if (!sceneRef.current || !environmentRef.current) return;
     
     const scene = sceneRef.current;
-    const environment = environmentRef.current;
     
     // Track current plant IDs
     const currentPlantIds = new Set(plants.map(p => p.id));
@@ -188,7 +187,6 @@ export const useGardenScene = ({
     // Add or update plants
     plants.forEach((plant, index) => {
       // Calculate position on shelf
-      const shelfWidth = 12;
       const numPlantsPerShelf = 2;
       const shelfIndex = Math.floor(index / numPlantsPerShelf);
       const positionOnShelf = index % numPlantsPerShelf;
@@ -297,7 +295,7 @@ export const useGardenScene = ({
     return () => {
       container.removeEventListener('click', handleClick);
     };
-  }, [onToggleCurtains, onToggleGrowLight]);
+  }, [onToggleCurtains, onToggleGrowLight, containerRef]);
   
   return {
     isLoading,

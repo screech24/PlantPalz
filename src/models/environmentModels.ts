@@ -232,7 +232,6 @@ export class EnvironmentModel {
     // Curtain dimensions
     const curtainWidth = 4.5;
     const curtainHeight = 7;
-    const curtainDepth = 0.05;
     
     // Curtain material
     const curtainMaterial = new THREE.MeshStandardMaterial({
