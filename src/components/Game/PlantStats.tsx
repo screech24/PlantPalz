@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Plant } from '../../types';
+import { useGameStore } from '../../store/gameStore';
 import ProgressBar from '../UI/ProgressBar';
 import Card from '../UI/Card';
 
 interface PlantStatsProps {
-  plant: Plant | null;
+  plantId: string | null;
 }
 
 const Container = styled.div`
@@ -63,7 +63,10 @@ const getGrowthStageLabel = (growthStage: number): string => {
   return 'Fully Grown';
 };
 
-export const PlantStats: React.FC<PlantStatsProps> = ({ plant }) => {
+export const PlantStats: React.FC<PlantStatsProps> = ({ plantId }) => {
+  const getPlantById = useGameStore((state) => state.getPlantById);
+  const plant = plantId ? getPlantById(plantId) : null;
+  
   if (!plant) {
     return (
       <Card>
