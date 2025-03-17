@@ -13,30 +13,25 @@ interface PlantControlsProps {
 
 const Container = styled.div`
   position: absolute;
-  bottom: 16px;
+  top: 16px;
   right: 16px;
   width: 280px;
   max-width: calc(100% - 32px);
-  max-height: calc(100% - 120px);
+  max-height: calc(100% - 100px);
   overflow-y: auto;
   z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  opacity: 0.95;
-  transform: translateY(0);
+  transition: opacity 0.3s ease;
+  opacity: 0.9;
   
   &:hover {
     opacity: 1;
   }
   
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    width: calc(100% - 32px);
-    max-height: 50vh;
+  @media (min-width: 768px) {
+    width: 300px;
   }
 `;
 
@@ -108,54 +103,43 @@ const Tab = styled.button<{ $active: boolean }>`
     $active ? theme.colors.primary : 'transparent'};
   color: ${({ $active, theme }) => 
     $active ? theme.colors.primary : theme.colors.text.secondary};
-  font-weight: ${({ $active }) => ($active ? '600' : '400')};
   cursor: pointer;
+  font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
   transition: all 0.2s ease;
   
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
   }
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-  }
-`;
-
-const SectionTitle = styled.h4`
-  margin: 16px 0 8px 0;
-  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 const CustomizationGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
   gap: 8px;
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-  }
+  margin-bottom: 16px;
+`;
+
+const SectionTitle = styled.h4`
+  margin: 0 0 8px 0;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-size: 0.9rem;
 `;
 
 const PotButton = styled.button<{ $isActive: boolean; $color: string }>`
   padding: 8px;
   background-color: ${({ $isActive, theme }) => 
-    $isActive ? theme.colors.primary + '33' : 'transparent'};
-  border: 1px solid ${({ $isActive, theme }) => 
-    $isActive ? theme.colors.primary : theme.colors.border};
+    $isActive ? theme.colors.primary : theme.colors.background};
+  color: ${({ $isActive, theme }) => 
+    $isActive ? theme.colors.text.onPrimary : theme.colors.text.primary};
+  border: 1px solid ${({ $color }) => $color};
   border-radius: 8px;
-  color: ${({ theme }) => theme.colors.text.primary};
   cursor: pointer;
-  transition: all 0.2s ease;
   font-size: 0.8rem;
+  transition: all 0.2s ease;
   
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary + '22'};
-  }
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: 6px;
-    font-size: 0.75rem;
+    background-color: ${({ $isActive, theme, $color }) => 
+      $isActive ? theme.colors.primary : $color + '33'};
   }
 `;
 
@@ -164,20 +148,13 @@ const ColorButton = styled.button<{ $isActive: boolean; $color: string }>`
   height: 32px;
   border-radius: 50%;
   background-color: ${({ $color }) => $color};
-  border: 2px solid ${({ $isActive, theme, $color }) => 
-    $isActive ? theme.colors.primary : $color};
+  border: 2px solid ${({ $isActive, theme }) => 
+    $isActive ? theme.colors.primary : 'transparent'};
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: ${({ $isActive }) => 
-    $isActive ? '0 0 0 2px rgba(0, 0, 0, 0.2)' : 'none'};
   
   &:hover {
     transform: scale(1.1);
-  }
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 28px;
-    height: 28px;
   }
 `;
 

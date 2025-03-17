@@ -67,8 +67,24 @@ const Copyright = styled.div`
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
 `;
 
+const VersionLink = styled.a`
+  display: block;
+  margin-top: ${({ theme }) => theme.spacing.sm};
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.typography.fontSize.xs};
+  text-decoration: none;
+  transition: color ${({ theme }) => theme.transitions.short};
+  
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const version = "0.9.1";
+  const changelogUrl = "https://github.com/screech24/PlantPalz/blob/main/CHANGELOG.md";
   
   return (
     <FooterContainer>
@@ -89,6 +105,9 @@ const Footer: React.FC = () => {
       
       <Copyright>
         © {currentYear} Plant Palz. All rights reserved.
+        <VersionLink href={changelogUrl} target="_blank" rel="noopener noreferrer">
+          Version {version}
+        </VersionLink>
       </Copyright>
     </FooterContainer>
   );

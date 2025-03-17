@@ -51,18 +51,6 @@ const GameGrid = styled.div`
 
 const ViewContainer = styled.div`
   grid-area: view;
-  height: 500px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: ${({ theme }) => theme.shadows.md};
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    height: 400px;
-  }
-  
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
-    height: 600px;
-  }
 `;
 
 const Sidebar = styled.div`
@@ -70,10 +58,6 @@ const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    margin-top: 16px;
-  }
 `;
 
 const ButtonGroup = styled.div`
