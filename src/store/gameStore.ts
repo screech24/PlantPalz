@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
-import { Plant, PlantType, PlantPersonality, CareAction, GameState, PlantAchievement } from '../types';
+import { Plant, PlantType, PlantPersonality, CareAction, GameState } from '../types';
 import { PotType, PotColor } from '../models/potModels';
 import { initialAchievements, checkAchievements } from '../utils/achievements';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useGameStore } from '../../store/gameStore';
 import Card from '../UI/Card';
-import { PlantAchievement, AchievementCategory } from '../../types';
+import { AchievementCategory } from '../../types';
 
 const Container = styled.div`
   margin-bottom: 24px;
