@@ -83,12 +83,12 @@ const CategoryTabs = styled.div`
   }
 `;
 
-const CategoryTab = styled.button<{ active: boolean }>`
+const CategoryTab = styled.button<{ $active: boolean }>`
   padding: 8px 16px;
-  background-color: ${({ theme, active }) => 
-    active ? theme.colors.primary : theme.colors.surface};
-  color: ${({ theme, active }) => 
-    active ? theme.colors.white : theme.colors.text.primary};
+  background-color: ${({ theme, $active }) => 
+    $active ? theme.colors.primary : theme.colors.surface};
+  color: ${({ theme, $active }) => 
+    $active ? theme.colors.white : theme.colors.text.primary};
   border: none;
   border-radius: 16px;
   margin-right: 8px;
@@ -97,8 +97,8 @@ const CategoryTab = styled.button<{ active: boolean }>`
   transition: all 0.2s ease;
   
   &:hover {
-    background-color: ${({ theme, active }) => 
-      active ? theme.colors.primary : theme.colors.border};
+    background-color: ${({ theme, $active }) => 
+      $active ? theme.colors.primary : theme.colors.border};
   }
 `;
 
@@ -141,7 +141,7 @@ export const Achievements: React.FC<AchievementsProps> = ({ onClose }) => {
           {categories.map((category) => (
             <CategoryTab
               key={category.id}
-              active={activeCategory === category.id}
+              $active={activeCategory === category.id}
               onClick={() => setActiveCategory(category.id)}
             >
               {category.label}

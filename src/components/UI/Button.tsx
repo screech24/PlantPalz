@@ -12,7 +12,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   href?: string;
 }
 
-const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
+interface StyledButtonProps {
+  $variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'water';
+  $size?: 'small' | 'medium' | 'large';
+  $fullWidth?: boolean;
+}
+
+const StyledButton = styled.button<StyledButtonProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -24,40 +30,40 @@ const StyledButton = styled.button<Omit<ButtonProps, 'children'>>`
   outline: none;
   
   /* Size variants */
-  padding: ${({ size, theme }) => 
-    size === 'small' ? `${theme.spacing.xs} ${theme.spacing.md}` : 
-    size === 'large' ? `${theme.spacing.md} ${theme.spacing.xl}` : 
+  padding: ${({ $size, theme }) => 
+    $size === 'small' ? `${theme.spacing.xs} ${theme.spacing.md}` : 
+    $size === 'large' ? `${theme.spacing.md} ${theme.spacing.xl}` : 
     `${theme.spacing.sm} ${theme.spacing.lg}`};
   
-  font-size: ${({ size, theme }) => 
-    size === 'small' ? theme.typography.fontSize.sm : 
-    size === 'large' ? theme.typography.fontSize.lg : 
+  font-size: ${({ $size, theme }) => 
+    $size === 'small' ? theme.typography.fontSize.sm : 
+    $size === 'large' ? theme.typography.fontSize.lg : 
     theme.typography.fontSize.md};
   
   /* Color variants */
-  background-color: ${({ variant, theme }) => 
-    variant === 'secondary' ? theme.colors.secondary : 
-    variant === 'danger' ? theme.colors.error : 
-    variant === 'success' ? theme.colors.primary : 
-    variant === 'water' ? '#2196f3' : 
+  background-color: ${({ $variant, theme }) => 
+    $variant === 'secondary' ? theme.colors.secondary : 
+    $variant === 'danger' ? theme.colors.error : 
+    $variant === 'success' ? theme.colors.primary : 
+    $variant === 'water' ? '#2196f3' : 
     theme.colors.primary};
   
-  color: ${({ variant, theme }) => 
-    variant === 'secondary' ? theme.colors.text.primary : 
+  color: ${({ $variant, theme }) => 
+    $variant === 'secondary' ? theme.colors.text.primary : 
     theme.colors.text.primary};
   
   /* Width */
-  width: ${({ fullWidth }) => fullWidth ? '100%' : 'auto'};
+  width: ${({ $fullWidth }) => $fullWidth ? '100%' : 'auto'};
   
   /* Hover and active states */
   &:hover {
     transform: translateY(-2px);
     box-shadow: ${({ theme }) => theme.shadows.md};
-    background-color: ${({ variant, theme }) => 
-      variant === 'secondary' ? theme.colors.secondaryDark : 
-      variant === 'danger' ? theme.colors.error : 
-      variant === 'success' ? theme.colors.primaryDark : 
-      variant === 'water' ? '#1976d2' : 
+    background-color: ${({ $variant, theme }) => 
+      $variant === 'secondary' ? theme.colors.secondaryDark : 
+      $variant === 'danger' ? theme.colors.error : 
+      $variant === 'success' ? theme.colors.primaryDark : 
+      $variant === 'water' ? '#1976d2' : 
       theme.colors.primaryDark};
   }
   
@@ -85,9 +91,9 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <StyledButton
       as={Component}
-      variant={variant}
-      size={size}
-      fullWidth={fullWidth}
+      $variant={variant}
+      $size={size}
+      $fullWidth={fullWidth}
       {...props}
     >
       {children}

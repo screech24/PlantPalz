@@ -33,9 +33,9 @@ const BarContainer = styled.div<{ $height: string; $backgroundColor: string }>`
   overflow: hidden;
 `;
 
-const Bar = styled.div<{ width: string; $color: string }>`
+const Bar = styled.div<{ $width: string; $color: string }>`
   height: 100%;
-  width: ${({ width }) => width};
+  width: ${({ $width }) => $width};
   background-color: ${({ $color, theme }) => $color || theme.colors.primary};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   transition: width ${({ theme }) => theme.transitions.medium};
@@ -63,7 +63,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         </LabelContainer>
       )}
       <BarContainer $height={height} $backgroundColor={backgroundColor || ''}>
-        <Bar width={`${percentage}%`} $color={color || ''} />
+        <Bar $width={`${percentage}%`} $color={color || ''} />
       </BarContainer>
     </Container>
   );

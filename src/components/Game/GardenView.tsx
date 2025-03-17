@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useGameStore } from '../../store/gameStore';
 import { useGardenScene } from '../../hooks/useGardenScene';
 import Button from '../UI/Button';
+import PlantControls from './PlantControls';
 
 const Container = styled.div`
   width: 100%;
@@ -103,6 +104,8 @@ export const GardenView: React.FC = () => {
   const isGrowLightOn = useGameStore((state) => state.isGrowLightOn);
   const toggleCurtains = useGameStore((state) => state.toggleCurtains);
   const toggleGrowLight = useGameStore((state) => state.toggleGrowLight);
+  const activePlantId = useGameStore((state) => state.activePlantId);
+  const setActivePlant = useGameStore((state) => state.setActivePlant);
   
   const { isLoading } = useGardenScene({
     containerRef: containerRef as React.RefObject<HTMLDivElement>,
@@ -110,8 +113,10 @@ export const GardenView: React.FC = () => {
     isDaytime,
     isCurtainsOpen,
     isGrowLightOn,
+    activePlantId,
     onToggleCurtains: toggleCurtains,
-    onToggleGrowLight: toggleGrowLight
+    onToggleGrowLight: toggleGrowLight,
+    onSelectPlant: setActivePlant
   });
   
   // If no plants, show empty state
@@ -138,6 +143,8 @@ export const GardenView: React.FC = () => {
         {isDaytime ? <SunIcon /> : <MoonIcon />}
         {isDaytime ? 'Day' : 'Night'}
       </TimeIndicator>
+      
+      {activePlantId && <PlantControls plantId={activePlantId} />}
       
       <ControlsOverlay>
         <Button 

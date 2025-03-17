@@ -11,7 +11,7 @@ interface ModalProps {
   maxWidth?: string;
 }
 
-const Overlay = styled.div<{ isOpen: boolean }>`
+const Overlay = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -22,22 +22,22 @@ const Overlay = styled.div<{ isOpen: boolean }>`
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
+  visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
   transition: opacity 0.3s ease, visibility 0.3s ease;
 `;
 
-const ModalContainer = styled.div<{ maxWidth: string; isOpen: boolean }>`
+const ModalContainer = styled.div<{ $maxWidth: string; $isOpen: boolean }>`
   background-color: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   padding: ${({ theme }) => theme.spacing.xl};
-  max-width: ${({ maxWidth }) => maxWidth};
+  max-width: ${({ $maxWidth }) => $maxWidth};
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: ${({ theme }) => theme.shadows.lg};
-  transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(-20px)')};
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  transform: ${({ $isOpen }) => ($isOpen ? 'translateY(0)' : 'translateY(-20px)')};
+  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
   transition: transform 0.3s ease, opacity 0.3s ease;
 `;
 
@@ -129,8 +129,8 @@ export const Modal: React.FC<ModalProps> = ({
   };
   
   return (
-    <Overlay isOpen={isOpen} onClick={handleOverlayClick}>
-      <ModalContainer maxWidth={maxWidth} isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
+    <Overlay $isOpen={isOpen} onClick={handleOverlayClick}>
+      <ModalContainer $maxWidth={maxWidth} $isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
         <Header>
           <Title>{title}</Title>
           <CloseButton onClick={onClose}>&times;</CloseButton>

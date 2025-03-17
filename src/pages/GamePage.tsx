@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useGameStore } from '../store/gameStore';
-import PlantView from '../components/Game/PlantView';
-import PlantStats from '../components/Game/PlantStats';
-import PlantActions from '../components/Game/PlantActions';
+import GardenView from '../components/Game/GardenView';
 import PlantList from '../components/Game/PlantList';
 import NewPlantForm from '../components/Game/NewPlantForm';
 import ShareModal from '../components/Shared/ShareModal';
-import PlantCustomization from '../components/Game/PlantCustomization';
-import GardenView from '../components/Game/GardenView';
-import Button from '../components/UI/Button';
 import Achievements from '../components/Game/Achievements';
+import Button from '../components/UI/Button';
 
 const Container = styled.div`
   max-width: 1200px;
@@ -47,46 +43,14 @@ const GameGrid = styled.div`
   gap: 16px;
   
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: 3fr 2fr;
+    grid-template-columns: 3fr 1fr;
     grid-template-areas: 
-      "view sidebar"
-      "actions sidebar";
+      "view sidebar";
   }
 `;
 
 const ViewContainer = styled.div`
   grid-area: view;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const ViewToggle = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-`;
-
-const ViewToggleButton = styled.button<{ active: boolean }>`
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  background-color: ${({ theme, active }) => 
-    active ? theme.colors.primary : theme.colors.surface};
-  color: ${({ theme, active }) => 
-    active ? theme.colors.white : theme.colors.text.primary};
-  font-weight: ${({ active }) => active ? 'bold' : 'normal'};
-  cursor: pointer;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background-color: ${({ theme, active }) => 
-      active ? theme.colors.primary : theme.colors.surfaceHover};
-  }
-`;
-
-const ActionsContainer = styled.div`
-  grid-area: actions;
 `;
 
 const Sidebar = styled.div`
@@ -134,7 +98,6 @@ export const GamePage: React.FC = () => {
   const [showNewPlantModal, setShowNewPlantModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
-  const [viewMode, setViewMode] = useState<'plant' | 'garden'>('plant');
   
   const plants = useGameStore((state) => state.plants);
   const activePlantId = useGameStore((state) => state.activePlantId);
@@ -198,37 +161,8 @@ export const GamePage: React.FC = () => {
       
       <GameGrid>
         <ViewContainer>
-          <ViewToggle>
-            <ViewToggleButton 
-              active={viewMode === 'plant'} 
-              onClick={() => setViewMode('plant')}
-            >
-              Individual Plant
-            </ViewToggleButton>
-            <ViewToggleButton 
-              active={viewMode === 'garden'} 
-              onClick={() => setViewMode('garden')}
-            >
-              Garden View
-            </ViewToggleButton>
-          </ViewToggle>
-          
-          {viewMode === 'plant' ? (
-            <PlantView plantId={activePlantId} />
-          ) : (
-            <GardenView />
-          )}
+          <GardenView />
         </ViewContainer>
-        
-        <ActionsContainer>
-          {viewMode === 'plant' && activePlantId && (
-            <>
-              <PlantStats plantId={activePlantId} />
-              <PlantActions plantId={activePlantId} />
-              <PlantCustomization plantId={activePlantId} />
-            </>
-          )}
-        </ActionsContainer>
         
         <Sidebar>
           <PlantList 

@@ -12,8 +12,10 @@ interface UseGardenSceneProps {
   isDaytime: boolean;
   isCurtainsOpen: boolean;
   isGrowLightOn: boolean;
+  activePlantId: string | null;
   onToggleCurtains: () => void;
   onToggleGrowLight: () => void;
+  onSelectPlant: (plantId: string) => void;
 }
 
 export const useGardenScene = ({
@@ -22,8 +24,10 @@ export const useGardenScene = ({
   isDaytime,
   isCurtainsOpen,
   isGrowLightOn,
+  activePlantId,
   onToggleCurtains,
-  onToggleGrowLight
+  onToggleGrowLight,
+  onSelectPlant
 }: UseGardenSceneProps) => {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
@@ -68,10 +72,12 @@ export const useGardenScene = ({
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.minDistance = 3;
-    controls.maxDistance = 15;
+    controls.minDistance = 5;
+    controls.maxDistance = 20;
     controls.maxPolarAngle = Math.PI / 2;
-    controls.target.set(0, 2, -5); // Look at the shelf
+    controls.minAzimuthAngle = -Math.PI / 2;
+    controls.maxAzimuthAngle = Math.PI / 2;
+    controls.target.set(0, 3, -5);
     controlsRef.current = controls;
     
     // Add ambient light
@@ -187,12 +193,12 @@ export const useGardenScene = ({
     // Add or update plants
     plants.forEach((plant, index) => {
       // Calculate position on shelf
-      const numPlantsPerShelf = 2;
+      const numPlantsPerShelf = 4; // Increased from 2 to allow more plants per shelf
       const shelfIndex = Math.floor(index / numPlantsPerShelf);
       const positionOnShelf = index % numPlantsPerShelf;
       
-      const x = (positionOnShelf * 4) - 2; // Space plants evenly on shelf
-      const y = shelfIndex * 1 + 1.2; // Position on different shelves
+      const x = (positionOnShelf * 3) - 4.5; // Adjusted spacing for more plants
+      const y = shelfIndex * 1.5 + 1.2; // Adjusted for new shelf height (1.5)
       const z = -6; // Align with shelf
       
       // Create or update pot
@@ -225,9 +231,42 @@ export const useGardenScene = ({
       // Position plant on top of pot
       plantModel.group.position.set(x, y + 0.2, z);
       plantModel.group.scale.set(0.5, 0.5, 0.5); // Scale down to fit on shelf
+      
+      // Highlight active plant
+      if (plant.id === activePlantId) {
+        // Add a subtle glow or highlight to the active plant
+        plantModel.group.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            if (Array.isArray(object.material)) {
+              object.material.forEach(mat => {
+                if (mat instanceof THREE.MeshStandardMaterial) {
+                  mat.emissive.set(0x333333);
+                }
+              });
+            } else if (object.material instanceof THREE.MeshStandardMaterial) {
+              object.material.emissive.set(0x333333);
+            }
+          }
+        });
+      } else {
+        // Remove highlight from inactive plants
+        plantModel.group.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            if (Array.isArray(object.material)) {
+              object.material.forEach(mat => {
+                if (mat instanceof THREE.MeshStandardMaterial) {
+                  mat.emissive.set(0x000000);
+                }
+              });
+            } else if (object.material instanceof THREE.MeshStandardMaterial) {
+              object.material.emissive.set(0x000000);
+            }
+          }
+        });
+      }
     });
     
-  }, [plants]);
+  }, [plants, activePlantId]);
   
   // Add click handlers for interactive elements
   useEffect(() => {
@@ -287,6 +326,44 @@ export const useGardenScene = ({
           onToggleGrowLight();
           return;
         }
+        
+        // Check if we clicked on a plant or pot
+        for (const [plantId, plantModel] of plantModelsRef.current.entries()) {
+          const plantIntersect = intersects.find(intersect => {
+            let obj = intersect.object;
+            while (obj.parent) {
+              if (obj.parent === plantModel.group) {
+                return true;
+              }
+              obj = obj.parent;
+            }
+            return false;
+          });
+          
+          if (plantIntersect) {
+            onSelectPlant(plantId);
+            return;
+          }
+        }
+        
+        // Check if we clicked on a pot
+        for (const [plantId, potModel] of potModelsRef.current.entries()) {
+          const potIntersect = intersects.find(intersect => {
+            let obj = intersect.object;
+            while (obj.parent) {
+              if (obj.parent === potModel.group) {
+                return true;
+              }
+              obj = obj.parent;
+            }
+            return false;
+          });
+          
+          if (potIntersect) {
+            onSelectPlant(plantId);
+            return;
+          }
+        }
       }
     };
     
@@ -295,7 +372,7 @@ export const useGardenScene = ({
     return () => {
       container.removeEventListener('click', handleClick);
     };
-  }, [onToggleCurtains, onToggleGrowLight, containerRef]);
+  }, [onToggleCurtains, onToggleGrowLight, onSelectPlant]);
   
   return {
     isLoading,

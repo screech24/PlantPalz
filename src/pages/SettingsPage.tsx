@@ -149,14 +149,14 @@ const ToggleLabel = styled.span`
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
 `;
 
-const ConfirmationModal = styled.div<{ isVisible: boolean }>`
+const ConfirmationModal = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
+  display: ${({ $isVisible }) => ($isVisible ? 'flex' : 'none')};
   justify-content: center;
   align-items: center;
   z-index: 1000;
@@ -270,7 +270,7 @@ const SettingsPage: React.FC = () => {
         </SettingItem>
       </SettingsSection>
       
-      <ConfirmationModal isVisible={showResetConfirmation}>
+      <ConfirmationModal $isVisible={showResetConfirmation}>
         <ModalContent>
           <ModalTitle>Are you sure?</ModalTitle>
           <p>

@@ -4,7 +4,7 @@ Plant Palz is a virtual plant simulation game where you can grow, nurture, and s
 
 ![Plant Palz Screenshot](public/screenshot.png)
 
-**Current Version: 0.8.5**
+**Current Version: 0.9.0**
 
 ## Features
 
@@ -136,6 +136,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Version History
 
+- 0.9.0: Added plant controls to garden view with interactive plant selection
 - 0.8.5: Improved living room dimensions and plant positioning on shelves
 - 0.8.4: Fixed styled-components warnings and improved code quality
 - 0.8.3: Fixed styled-components warnings by using transient props with $ prefix

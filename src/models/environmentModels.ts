@@ -65,9 +65,9 @@ export class EnvironmentModel {
     }
     
     // Room dimensions
-    const roomWidth = 20;
-    const roomDepth = 15;
-    const roomHeight = 10;
+    const roomWidth = 30;
+    const roomDepth = 25;
+    const roomHeight = 15;
     const wallThickness = 0.2;
     
     // Floor
@@ -298,10 +298,10 @@ export class EnvironmentModel {
     }
     
     // Shelf dimensions
-    const shelfWidth = 12;
-    const shelfDepth = 2;
+    const shelfWidth = 16;
+    const shelfDepth = 2.5;
     const shelfThickness = 0.2;
-    const shelfHeight = 1;
+    const shelfHeight = 1.5;
     const numShelves = 4;
     
     // Shelf material
@@ -335,16 +335,10 @@ export class EnvironmentModel {
     rightSupport.castShadow = true;
     this.shelf.add(rightSupport);
     
-    const middleSupport = new THREE.Mesh(supportGeometry, shelfMaterial);
-    middleSupport.position.set(0, (numShelves * shelfHeight) / 2, -6);
-    middleSupport.receiveShadow = true;
-    middleSupport.castShadow = true;
-    this.shelf.add(middleSupport);
-    
-    // Create back panel
+    // Add back panel
     const backPanelGeometry = new THREE.BoxGeometry(shelfWidth, numShelves * shelfHeight, shelfThickness);
     const backPanelMaterial = new THREE.MeshStandardMaterial({
-      color: 0x8B4513, // Slightly lighter than the shelf
+      color: 0x8B4513, // Match shelf color
       roughness: 0.8,
       metalness: 0.2
     });
@@ -387,7 +381,7 @@ export class EnvironmentModel {
       metalness: 0.5
     });
     const fixture = new THREE.Mesh(fixtureGeometry, fixtureMaterial);
-    fixture.position.set(0, 5, -5.5);
+    fixture.position.set(0, 8, -5.5);
     fixture.castShadow = true;
     this.growLight.add(fixture);
     
@@ -404,7 +398,7 @@ export class EnvironmentModel {
     // Create multiple bulbs along the fixture
     for (let i = -4; i <= 4; i += 2) {
       const bulb = new THREE.Mesh(bulbGeometry, bulbMaterial);
-      bulb.position.set(i, 4.8, -5.5);
+      bulb.position.set(i, 7.8, -5.5);
       bulb.rotation.x = Math.PI / 2;
       this.growLight.add(bulb);
     }
@@ -418,7 +412,7 @@ export class EnvironmentModel {
       0.5,
       2
     );
-    growLightIllumination.position.set(0, 4.8, -5.5);
+    growLightIllumination.position.set(0, 7.8, -5.5);
     growLightIllumination.target.position.set(0, 0, -5.5);
     growLightIllumination.castShadow = true;
     
@@ -432,7 +426,7 @@ export class EnvironmentModel {
     this.growLight.add(growLightIllumination.target);
     
     // Add hanging wires
-    const wireGeometry = new THREE.CylinderGeometry(0.02, 0.02, 4.2, 8);
+    const wireGeometry = new THREE.CylinderGeometry(0.02, 0.02, 6.2, 8);
     const wireMaterial = new THREE.MeshStandardMaterial({
       color: 0x000000, // Black wire
       roughness: 0.9,
@@ -441,11 +435,11 @@ export class EnvironmentModel {
     
     // Create wires at each end of the fixture
     const leftWire = new THREE.Mesh(wireGeometry, wireMaterial);
-    leftWire.position.set(-fixtureWidth / 2 + 0.5, 7.1, -5.5);
+    leftWire.position.set(-fixtureWidth / 2 + 0.5, 11.1, -5.5);
     this.growLight.add(leftWire);
     
     const rightWire = new THREE.Mesh(wireGeometry, wireMaterial);
-    rightWire.position.set(fixtureWidth / 2 - 0.5, 7.1, -5.5);
+    rightWire.position.set(fixtureWidth / 2 - 0.5, 11.1, -5.5);
     this.growLight.add(rightWire);
   }
   
