@@ -5,6 +5,30 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.5] - 2024-06-17
+
+### Changed
+- Increased living room dimensions for a more spacious environment
+- Improved plant positioning logic on shelves to accommodate more plants
+- Adjusted shelf dimensions and spacing for better plant display
+- Enhanced camera settings to prevent clipping through walls
+- Raised grow light position to make more room for plants
+- Optimized plant distribution on shelves (4 plants per shelf instead of 2)
+
+## [0.8.4] - 2024-06-10
+
+### Fixed
+- Removed @import CSS syntax from styled-components GlobalStyle and moved Google Fonts to index.html
+- Fixed styled-components warnings by using transient props with $ prefix consistently
+- Updated Button component to use $variant, $size, and $fullWidth props
+- Updated Card component to use $padding, $clickable, $elevation, and $fullWidth props
+- Updated ProgressBar component to use $width, $backgroundColor, and $color props
+- Updated ViewToggleButton component to use $active prop
+- Updated Modal component to use $isOpen and $maxWidth props
+- Updated ConfirmationModal component to use $isVisible prop
+- Updated CategoryTab component to use $active prop
+- Resolved React DOM warnings about unknown props being passed to DOM elements
+
 ## [0.8.3] - 2024-05-23
 
 ### Fixed
