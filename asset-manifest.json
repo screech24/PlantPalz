@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/PlantPalz/static/css/main.e6c13ad2.css",
-    "main.js": "/PlantPalz/static/js/main.885573b2.js",
+    "main.js": "/PlantPalz/static/js/main.af3ba9e0.js",
     "static/js/453.a35c55de.chunk.js": "/PlantPalz/static/js/453.a35c55de.chunk.js",
     "service-worker.js": "/PlantPalz/service-worker.js",
     "index.html": "/PlantPalz/index.html",
     "main.e6c13ad2.css.map": "/PlantPalz/static/css/main.e6c13ad2.css.map",
-    "main.885573b2.js.map": "/PlantPalz/static/js/main.885573b2.js.map",
+    "main.af3ba9e0.js.map": "/PlantPalz/static/js/main.af3ba9e0.js.map",
     "453.a35c55de.chunk.js.map": "/PlantPalz/static/js/453.a35c55de.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.885573b2.js"
+    "static/js/main.af3ba9e0.js"
   ]
 }
