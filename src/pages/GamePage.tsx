@@ -8,6 +8,7 @@ import PlantList from '../components/Game/PlantList';
 import NewPlantForm from '../components/Game/NewPlantForm';
 import ShareModal from '../components/Shared/ShareModal';
 import PlantCustomization from '../components/Game/PlantCustomization';
+import GardenView from '../components/Game/GardenView';
 import Button from '../components/UI/Button';
 import Achievements from '../components/Game/Achievements';
 
@@ -48,145 +49,219 @@ const GameGrid = styled.div`
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 3fr 2fr;
     grid-template-areas: 
-      "view stats"
-      "view actions"
-      "view customize"
-      "view customize";
+      "view sidebar"
+      "actions sidebar";
   }
 `;
 
-const PlantViewContainer = styled.div`
-  height: 400px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: ${({ theme }) => theme.shadows.md};
+const ViewContainer = styled.div`
+  grid-area: view;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const ViewToggle = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+`;
+
+const ViewToggleButton = styled.button<{ active: boolean }>`
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: ${({ theme, active }) => 
+    active ? theme.colors.primary : theme.colors.surface};
+  color: ${({ theme, active }) => 
+    active ? theme.colors.white : theme.colors.text.primary};
+  font-weight: ${({ active }) => active ? 'bold' : 'normal'};
+  cursor: pointer;
+  transition: all 0.2s ease;
   
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-area: view;
-    height: 100%;
-    min-height: 500px;
-  }
-`;
-
-const StatsContainer = styled.div`
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-area: stats;
+  &:hover {
+    background-color: ${({ theme, active }) => 
+      active ? theme.colors.primary : theme.colors.surfaceHover};
   }
 `;
 
 const ActionsContainer = styled.div`
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-area: actions;
-  }
+  grid-area: actions;
 `;
 
-const CustomizationContainer = styled.div`
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-area: customize;
-  }
-`;
-
-const ListContainer = styled.div`
-  margin-top: 24px;
+const Sidebar = styled.div`
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 8px;
+  flex-wrap: wrap;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 100%;
-    
-    > button {
-      flex: 1;
-    }
+    flex-direction: column;
   }
 `;
 
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+`;
+
+const ModalContent = styled.div`
+  background-color: ${({ theme }) => theme.colors.surface};
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+`;
+
 export const GamePage: React.FC = () => {
-  const [isNewPlantModalOpen, setIsNewPlantModalOpen] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const { activePlantId, getPlantById } = useGameStore();
+  const [showNewPlantModal, setShowNewPlantModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showAchievements, setShowAchievements] = useState(false);
+  const [viewMode, setViewMode] = useState<'plant' | 'garden'>('plant');
   
-  const activePlant = activePlantId ? getPlantById(activePlantId) : null;
-  
-  const handleOpenNewPlantModal = () => {
-    setIsNewPlantModalOpen(true);
-  };
-  
-  const handleCloseNewPlantModal = () => {
-    setIsNewPlantModalOpen(false);
-  };
-  
-  const handleOpenShareModal = () => {
-    if (activePlant) {
-      setIsShareModalOpen(true);
-    }
-  };
-  
-  const handleCloseShareModal = () => {
-    setIsShareModalOpen(false);
-  };
+  const plants = useGameStore((state) => state.plants);
+  const activePlantId = useGameStore((state) => state.activePlantId);
+  const setActivePlant = useGameStore((state) => state.setActivePlant);
+  const updateGameState = useGameStore((state) => state.updateGameState);
   
   // Update game state every second
   useEffect(() => {
     const interval = setInterval(() => {
-      useGameStore.getState().updateGameState();
+      updateGameState();
     }, 1000);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [updateGameState]);
+  
+  const handleOpenNewPlantModal = () => {
+    setShowNewPlantModal(true);
+  };
+  
+  const handleCloseNewPlantModal = () => {
+    setShowNewPlantModal(false);
+  };
+  
+  const handleOpenShareModal = () => {
+    if (activePlantId) {
+      setShowShareModal(true);
+    }
+  };
+  
+  const handleCloseShareModal = () => {
+    setShowShareModal(false);
+  };
+  
+  const handleToggleAchievements = () => {
+    setShowAchievements(!showAchievements);
+  };
   
   return (
     <Container>
       <Header>
-        <Title>My Garden</Title>
+        <Title>Your Garden</Title>
         <ButtonGroup>
-          {activePlant && (
-            <Button onClick={handleOpenShareModal} variant="secondary">
-              Share Plant
-            </Button>
-          )}
           <Button onClick={handleOpenNewPlantModal} variant="primary">
             New Plant
+          </Button>
+          <Button 
+            onClick={handleOpenShareModal} 
+            variant="secondary"
+            disabled={!activePlantId}
+          >
+            Share Plant
+          </Button>
+          <Button 
+            onClick={handleToggleAchievements} 
+            variant="secondary"
+          >
+            Achievements
           </Button>
         </ButtonGroup>
       </Header>
       
       <GameGrid>
-        <PlantViewContainer id="plant-view-container">
-          {activePlantId && <PlantView plantId={activePlantId} />}
-        </PlantViewContainer>
-        
-        <StatsContainer>
-          <PlantStats plant={activePlant} />
-        </StatsContainer>
+        <ViewContainer>
+          <ViewToggle>
+            <ViewToggleButton 
+              active={viewMode === 'plant'} 
+              onClick={() => setViewMode('plant')}
+            >
+              Individual Plant
+            </ViewToggleButton>
+            <ViewToggleButton 
+              active={viewMode === 'garden'} 
+              onClick={() => setViewMode('garden')}
+            >
+              Garden View
+            </ViewToggleButton>
+          </ViewToggle>
+          
+          {viewMode === 'plant' ? (
+            <PlantView plantId={activePlantId} />
+          ) : (
+            <GardenView />
+          )}
+        </ViewContainer>
         
         <ActionsContainer>
-          <PlantActions plant={activePlant} />
+          {viewMode === 'plant' && activePlantId && (
+            <>
+              <PlantStats plantId={activePlantId} />
+              <PlantActions plantId={activePlantId} />
+              <PlantCustomization plantId={activePlantId} />
+            </>
+          )}
         </ActionsContainer>
         
-        <CustomizationContainer>
-          {activePlant && <PlantCustomization plant={activePlant} />}
-        </CustomizationContainer>
-        
-        <Achievements />
+        <Sidebar>
+          <PlantList 
+            plants={plants} 
+            activePlantId={activePlantId} 
+            onSelectPlant={setActivePlant}
+          />
+        </Sidebar>
       </GameGrid>
       
-      <ListContainer>
-        <PlantList onNewPlant={handleOpenNewPlantModal} />
-      </ListContainer>
+      {showNewPlantModal && (
+        <Modal onClick={handleCloseNewPlantModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <NewPlantForm onClose={handleCloseNewPlantModal} />
+          </ModalContent>
+        </Modal>
+      )}
       
-      <NewPlantForm 
-        isOpen={isNewPlantModalOpen} 
-        onClose={handleCloseNewPlantModal} 
-      />
+      {showShareModal && activePlantId && (
+        <Modal onClick={handleCloseShareModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ShareModal plantId={activePlantId} onClose={handleCloseShareModal} />
+          </ModalContent>
+        </Modal>
+      )}
       
-      <ShareModal 
-        isOpen={isShareModalOpen} 
-        onClose={handleCloseShareModal} 
-        plant={activePlant} 
-      />
+      {showAchievements && (
+        <Modal onClick={handleToggleAchievements}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <Achievements onClose={handleToggleAchievements} />
+          </ModalContent>
+        </Modal>
+      )}
     </Container>
   );
 };

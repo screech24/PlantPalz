@@ -5,7 +5,23 @@ All notable changes to the Plant Palz project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] - 2025-03-17
+## [0.8.0] - 2024-05-17
+
+### Added
+- Garden view with 3D living room scene showing all plants together
+- Interactive shelving unit that displays up to 8 plants
+- Day/night cycle with window and curtains that can be opened/closed
+- Grow light that can be turned on/off to provide artificial light
+- Toggle between individual plant view and garden view
+- Automatic sunlight adjustment based on time of day and light sources
+
+### Changed
+- Improved game state management to include garden-wide settings
+- Enhanced UI with view toggle buttons for switching between views
+- Updated plant sunlight mechanics to be affected by curtains and grow light
+- Reorganized game page layout for better integration of garden view
+
+## [0.7.0] - 2024-03-17
 
 ### Added
 - Talk to Plant feature that significantly boosts plant happiness

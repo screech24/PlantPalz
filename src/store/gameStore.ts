@@ -22,6 +22,10 @@ interface GameStore extends GameState {
   prunePlant: (id: string) => void;
   talkToPlant: (id: string) => void;
   
+  // Garden actions
+  toggleCurtains: () => void;
+  toggleGrowLight: () => void;
+  
   // Time simulation
   updateGameState: () => void;
   setTimeScale: (scale: number) => void;
@@ -182,10 +186,15 @@ export const useGameStore = create<GameStore>()(
       lastUpdate: Date.now(),
       achievements: initialAchievements,
       inventory: {
-        pots: ['basic_pot'],
-        fertilizers: ['basic_fertilizer'],
-        decorations: [],
+        pots: [],
+        fertilizers: [],
+        decorations: []
       },
+      
+      // Garden settings
+      isDaytime: true,
+      isCurtainsOpen: true,
+      isGrowLightOn: false,
       
       // Plant actions
       addPlant: (name, type) => {
@@ -402,23 +411,107 @@ export const useGameStore = create<GameStore>()(
         }));
       },
       
+      // Garden actions
+      toggleCurtains: () => {
+        set(state => {
+          const isCurtainsOpen = !state.isCurtainsOpen;
+          
+          // Update sunlight for all plants based on curtain state
+          const plants = state.plants.map(plant => {
+            // During day, curtains affect sunlight
+            if (state.isDaytime) {
+              const sunExposure = isCurtainsOpen ? 
+                Math.min(plant.sunExposure + 20, 100) : // Increase when open
+                Math.max(plant.sunExposure - 20, 0);    // Decrease when closed
+              
+              return {
+                ...plant,
+                sunExposure
+              };
+            }
+            
+            return plant;
+          });
+          
+          return {
+            ...state,
+            isCurtainsOpen,
+            plants
+          };
+        });
+      },
+      
+      toggleGrowLight: () => {
+        set(state => {
+          const isGrowLightOn = !state.isGrowLightOn;
+          
+          // Update sunlight for all plants based on grow light state
+          const plants = state.plants.map(plant => {
+            // At night, grow light affects sunlight
+            if (!state.isDaytime) {
+              const sunExposure = isGrowLightOn ? 
+                Math.min(plant.sunExposure + 30, 100) : // Increase when on
+                Math.max(plant.sunExposure - 30, 0);    // Decrease when off
+              
+              return {
+                ...plant,
+                sunExposure
+              };
+            }
+            
+            return plant;
+          });
+          
+          return {
+            ...state,
+            isGrowLightOn,
+            plants
+          };
+        });
+      },
+      
       // Time simulation
       updateGameState: () => {
-        const currentTime = Date.now();
-        const { lastUpdate, timeScale, plants, achievements } = get();
-        const timePassed = (currentTime - lastUpdate) * timeScale;
-        
-        if (timePassed < 1000) return; // Don't update if less than 1 second has passed
-        
-        const updatedPlants = plants.map((plant) => updatePlantGrowth(plant, timePassed));
-        
-        // Check for achievements
-        const updatedAchievements = checkAchievements(updatedPlants, achievements);
-        
-        set({
-          lastUpdate: currentTime,
-          plants: updatedPlants,
-          achievements: updatedAchievements,
+        set(state => {
+          const now = Date.now();
+          const timePassed = (now - state.lastUpdate) * state.timeScale;
+          
+          // Update time of day (day/night cycle)
+          // Day/night cycle every 10 minutes of game time
+          const dayNightCycleDuration = 10 * 60 * 1000; // 10 minutes in ms
+          const timeOfDay = (now % dayNightCycleDuration) / dayNightCycleDuration;
+          const isDaytime = timeOfDay < 0.7; // 70% day, 30% night
+          
+          // If day/night state changed, update plants accordingly
+          let plants = state.plants;
+          if (isDaytime !== state.isDaytime) {
+            plants = plants.map(plant => {
+              // When transitioning to day, increase sunlight if curtains open
+              // When transitioning to night, decrease sunlight unless grow light is on
+              const sunExposure = isDaytime ? 
+                (state.isCurtainsOpen ? Math.min(plant.sunExposure + 20, 100) : plant.sunExposure) :
+                (state.isGrowLightOn ? plant.sunExposure : Math.max(plant.sunExposure - 20, 0));
+              
+              return {
+                ...plant,
+                sunExposure
+              };
+            });
+          }
+          
+          // Update each plant
+          plants = plants.map(plant => updatePlantGrowth({...plant}, timePassed));
+          
+          // Check for achievements
+          const achievements = checkAchievements(plants, state.achievements);
+          
+          return {
+            ...state,
+            plants,
+            lastUpdate: now,
+            isDaytime,
+            achievements
+          };
         });
       },
       
@@ -435,15 +528,29 @@ export const useGameStore = create<GameStore>()(
           lastUpdate: Date.now(),
           achievements: initialAchievements,
           inventory: {
-            pots: ['basic_pot'],
-            fertilizers: ['basic_fertilizer'],
-            decorations: [],
+            pots: [],
+            fertilizers: [],
+            decorations: []
           },
+          isDaytime: true,
+          isCurtainsOpen: true,
+          isGrowLightOn: false,
         });
       },
     }),
     {
       name: 'plant-palz-storage',
+      partialize: (state) => ({
+        plants: state.plants,
+        activePlantId: state.activePlantId,
+        timeScale: state.timeScale,
+        lastUpdate: state.lastUpdate,
+        achievements: state.achievements,
+        inventory: state.inventory,
+        isDaytime: state.isDaytime,
+        isCurtainsOpen: state.isCurtainsOpen,
+        isGrowLightOn: state.isGrowLightOn
+      }),
     }
   )
 ); 

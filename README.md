@@ -4,18 +4,30 @@ Plant Palz is a virtual plant simulation game where you can grow, nurture, and s
 
 ![Plant Palz Screenshot](public/screenshot.png)
 
-**Current Version: 0.7.0**
+**Current Version: 0.8.0**
 
 ## Features
 
 - **Grow Your Garden**: Start with a seedling and watch it grow through different stages as you care for it.
 - **Interactive Care**: Water, fertilize, prune, adjust sunlight, and talk to your plants to keep them happy and healthy.
 - **Plant Personalities**: Each plant has a unique personality (sassy, shy, cheerful, grumpy, philosophical, or dramatic) that affects how it responds to your care.
+- **Garden View**: View all your plants together in a 3D living room scene with interactive lighting controls.
+- **Day/Night Cycle**: Experience a day/night cycle that affects your plants' sunlight needs.
 - **Achievements System**: Unlock achievements as you care for your plants and grow your garden.
 - **Share Your Plants**: Share your plants with friends and family via social media or direct links.
 - **Customization**: Choose from different plant types and pot styles, each with unique characteristics.
 - **Time Simulation**: Watch your plants grow over time with adjustable time scales.
 - **Dark Mode**: Toggle between light and dark themes for comfortable viewing day or night.
+
+## Garden View Features
+
+The garden view allows you to:
+
+- See all your plants displayed together on a shelving unit in a living room setting
+- Control sunlight through interactive curtains that can be opened or closed
+- Use a grow light that can be turned on/off to provide artificial light at night
+- Experience a day/night cycle that affects your plants' sunlight needs
+- Toggle between individual plant view and garden view
 
 ## Customization Features
 

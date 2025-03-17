@@ -66,4 +66,8 @@ export type GameState = {
     fertilizers: string[];
     decorations: string[];
   };
+  // Garden settings
+  isDaytime: boolean;
+  isCurtainsOpen: boolean;
+  isGrowLightOn: boolean;
 }; 
