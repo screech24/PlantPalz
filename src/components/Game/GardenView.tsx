@@ -2,15 +2,14 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useGameStore } from '../../store/gameStore';
 import { useGardenScene } from '../../hooks/useGardenScene';
-import Button from '../UI/Button';
-import PlantControls from './PlantControls';
 
 const Container = styled.div`
   width: 100%;
-  height: 500px;
+  height: 400px;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
+  margin-bottom: 16px;
   
   @media (min-width: 768px) {
     height: 600px;
@@ -27,17 +26,6 @@ const LoadingOverlay = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${({ theme }) => `rgba(${theme.isDark ? '0, 0, 0' : '255, 255, 255'}, 0.8)`};
-  z-index: 10;
-`;
-
-const ControlsOverlay = styled.div`
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  display: flex;
-  justify-content: center;
-  gap: 16px;
   z-index: 10;
 `;
 
@@ -143,24 +131,6 @@ export const GardenView: React.FC = () => {
         {isDaytime ? <SunIcon /> : <MoonIcon />}
         {isDaytime ? 'Day' : 'Night'}
       </TimeIndicator>
-      
-      {activePlantId && <PlantControls plantId={activePlantId} />}
-      
-      <ControlsOverlay>
-        <Button 
-          onClick={toggleCurtains}
-          variant="secondary"
-        >
-          {isCurtainsOpen ? 'Close Curtains' : 'Open Curtains'}
-        </Button>
-        
-        <Button 
-          onClick={toggleGrowLight}
-          variant="secondary"
-        >
-          {isGrowLightOn ? 'Turn Off Grow Light' : 'Turn On Grow Light'}
-        </Button>
-      </ControlsOverlay>
     </Container>
   );
 };

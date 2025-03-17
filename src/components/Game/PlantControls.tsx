@@ -12,32 +12,15 @@ interface PlantControlsProps {
 }
 
 const Container = styled.div`
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 280px;
-  max-width: calc(100% - 32px);
-  max-height: calc(100% - 100px);
-  overflow-y: auto;
-  z-index: 10;
+  width: 100%;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  transition: opacity 0.3s ease;
-  opacity: 0.9;
-  
-  &:hover {
-    opacity: 1;
-  }
-  
-  @media (min-width: 768px) {
-    width: 300px;
-  }
 `;
 
 const StyledCard = styled(Card)`
-  background-color: ${({ theme }) => `rgba(${theme.isDark ? '30, 30, 30, 0.85' : '255, 255, 255, 0.85'})`};
-  backdrop-filter: blur(5px);
+  background-color: ${({ theme }) => theme.colors.surface};
 `;
 
 const StatsGrid = styled.div`
@@ -189,6 +172,10 @@ export const PlantControls: React.FC<PlantControlsProps> = ({ plantId }) => {
   const talkToPlant = useGameStore((state) => state.talkToPlant);
   const updatePotType = useGameStore((state) => state.updatePotType);
   const updatePotColor = useGameStore((state) => state.updatePotColor);
+  const toggleCurtains = useGameStore((state) => state.toggleCurtains);
+  const toggleGrowLight = useGameStore((state) => state.toggleGrowLight);
+  const isCurtainsOpen = useGameStore((state) => state.isCurtainsOpen);
+  const isGrowLightOn = useGameStore((state) => state.isGrowLightOn);
   
   const plant = plantId ? getPlantById(plantId) : null;
   
@@ -375,6 +362,20 @@ export const PlantControls: React.FC<PlantControlsProps> = ({ plantId }) => {
                 variant="primary"
               >
                 Talk
+              </Button>
+              
+              <Button 
+                onClick={toggleCurtains}
+                variant="secondary"
+              >
+                {isCurtainsOpen ? 'Close Curtains' : 'Open Curtains'}
+              </Button>
+              
+              <Button 
+                onClick={toggleGrowLight}
+                variant="secondary"
+              >
+                {isGrowLightOn ? 'Turn Off Light' : 'Turn On Light'}
               </Button>
             </ActionGrid>
             

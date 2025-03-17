@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useGameStore } from '../store/gameStore';
 import GardenView from '../components/Game/GardenView';
 import PlantList from '../components/Game/PlantList';
+import PlantControls from '../components/Game/PlantControls';
 import NewPlantForm from '../components/Game/NewPlantForm';
 import ShareModal from '../components/Shared/ShareModal';
 import Achievements from '../components/Game/Achievements';
@@ -45,12 +46,17 @@ const GameGrid = styled.div`
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 3fr 1fr;
     grid-template-areas: 
-      "view sidebar";
+      "view sidebar"
+      "controls sidebar";
   }
 `;
 
 const ViewContainer = styled.div`
   grid-area: view;
+`;
+
+const ControlsContainer = styled.div`
+  grid-area: controls;
 `;
 
 const Sidebar = styled.div`
@@ -92,6 +98,25 @@ const ModalContent = styled.div`
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+`;
+
+// Mobile-specific components
+const MobileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
+  }
+`;
+
+const DesktopContainer = styled.div`
+  display: none;
+  
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: block;
+  }
 `;
 
 export const GamePage: React.FC = () => {
@@ -159,19 +184,38 @@ export const GamePage: React.FC = () => {
         </ButtonGroup>
       </Header>
       
-      <GameGrid>
-        <ViewContainer>
-          <GardenView />
-        </ViewContainer>
-        
-        <Sidebar>
-          <PlantList 
-            plants={plants} 
-            activePlantId={activePlantId} 
-            onSelectPlant={setActivePlant}
-          />
-        </Sidebar>
-      </GameGrid>
+      {/* Mobile Layout */}
+      <MobileContainer>
+        <GardenView />
+        <PlantList 
+          plants={plants} 
+          activePlantId={activePlantId} 
+          onSelectPlant={setActivePlant}
+        />
+        {activePlantId && <PlantControls plantId={activePlantId} />}
+      </MobileContainer>
+      
+      {/* Desktop Layout */}
+      <DesktopContainer>
+        <GameGrid>
+          <ViewContainer>
+            <GardenView />
+            {activePlantId && (
+              <ControlsContainer>
+                <PlantControls plantId={activePlantId} />
+              </ControlsContainer>
+            )}
+          </ViewContainer>
+          
+          <Sidebar>
+            <PlantList 
+              plants={plants} 
+              activePlantId={activePlantId} 
+              onSelectPlant={setActivePlant}
+            />
+          </Sidebar>
+        </GameGrid>
+      </DesktopContainer>
       
       {showNewPlantModal && (
         <Modal onClick={handleCloseNewPlantModal}>

@@ -83,7 +83,7 @@ const VersionLink = styled.a`
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const version = "0.9.1";
+  const version = "0.9.2";
   const changelogUrl = "https://github.com/screech24/PlantPalz/blob/main/CHANGELOG.md";
   
   return (
