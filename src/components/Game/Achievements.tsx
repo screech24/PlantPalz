@@ -108,7 +108,11 @@ const UnlockedDate = styled.div`
   margin-top: 8px;
 `;
 
-export const Achievements: React.FC = () => {
+interface AchievementsProps {
+  onClose: () => void;
+}
+
+export const Achievements: React.FC<AchievementsProps> = ({ onClose }) => {
   const [activeCategory, setActiveCategory] = React.useState<AchievementCategory | 'all'>('all');
   const achievements = useGameStore((state) => state.achievements);
   

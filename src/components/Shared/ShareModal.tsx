@@ -4,11 +4,12 @@ import { Plant } from '../../types';
 import { getShareUrl, copyShareLink, shareToSocialMedia, captureScreenshot } from '../../utils/sharing';
 import Modal from '../UI/Modal';
 import Button from '../UI/Button';
+import { useGameStore } from '../../store/gameStore';
 
 interface ShareModalProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
-  plant: Plant | null;
+  plantId: string;
 }
 
 const ShareGrid = styled.div`
@@ -80,9 +81,12 @@ const SuccessMessage = styled.div`
   text-align: center;
 `;
 
-export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, plant }) => {
+export const ShareModal: React.FC<ShareModalProps> = ({ isOpen = true, onClose, plantId }) => {
   const [copied, setCopied] = useState(false);
   const [shareSuccess, setShareSuccess] = useState<string | null>(null);
+  const getPlantById = useGameStore(state => state.getPlantById);
+  
+  const plant = getPlantById(plantId);
   
   if (!plant) return null;
   
