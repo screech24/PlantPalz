@@ -4,7 +4,7 @@ import { useGameStore } from '../../store/gameStore';
 import { useGardenScene } from '../../hooks/useGardenScene';
 import { getMoodResponse } from '../../utils/plantResponses';
 import Button from '../UI/Button';
-import PlantControls from './PlantControls';
+import { PlantControls } from './PlantControls';
 
 const Container = styled.div`
   position: relative;
@@ -88,8 +88,8 @@ const MoonIcon = () => (
 
 export const GardenView: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { plants, activePlantId, setActivePlantId } = useGameStore();
-  const canvasRef = useGardenScene(plants, activePlantId, setActivePlantId);
+  const { plants, activePlantId, setActivePlant } = useGameStore();
+  const canvasRef = useGardenScene(plants, activePlantId, setActivePlant);
   const [moodMessage, setMoodMessage] = useState<string | null>(null);
   
   useEffect(() => {
